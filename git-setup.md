@@ -1,3 +1,7 @@
+---
+licence: Copyright © 2019 Ray. <a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons Attribution 4.0 International License" src="https://i.creativecommons.org/l/by/4.0/80x15.png" /></a>
+---
+
 # log formats
 
 Choose one from below and set them with `git config --global format.pretty "..."`. (Added committer name for both.)
