@@ -13,4 +13,12 @@ layout: default
     {%- endif -%}
   </p>
   {{ content }}
+
+  <hr>
+
+  <footer class="post-footer">
+    {% if page.licence %}
+    <p>{{ page.licence }}</p>
+    {% endif %}
+  </footer>
 </div>
