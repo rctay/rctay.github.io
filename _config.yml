@@ -26,12 +26,6 @@ paginate:            5
 twitter_username: jekyllrb
 github_username:  jekyll
 
-# About/contact
-author:
-  name:              Mark Otto
-  url:               https://twitter.com/mdo
-  email:             markdotto@gmail.com
-
 # Build settings
 markdown: kramdown
 #theme: minima
