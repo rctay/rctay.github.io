@@ -18,6 +18,6 @@ Source: <https://en.wikipedia.org/wiki/Password_strength>
 
 - RFC 4086 "Randomness Requirements for Security
 
-Depends on threat model
-- 29 bits: only online attacks
-- 96 bits: important cryptographic keys
+- Depends on threat model
+  - 29 bits: only online attacks
+  - 96 bits: important cryptographic keys
