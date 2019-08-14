@@ -15,7 +15,7 @@ Choose one from below and set them with `git config --global format.pretty "..."
 
   Modified to show committer name
 
-  - Since git 2.21.0, git supports a `human` pretty format for dates[^git-2.21.0-rel], so use `%ad` in place of `%ar`:
+  - Since git 2.21.0, git supports a `human` pretty format for dates[^git-2-21-0-rel], so use `%ad` in place of `%ar`:
 
     `%C(bold blue)%h%C(reset) - %C(bold green)%ad%C(reset) %C(white)%s%C(reset) %C(dim white)- %an, %cn%C(reset)%C(bold yellow)%d%C(reset)`
 
@@ -25,7 +25,7 @@ Choose one from below and set them with `git config --global format.pretty "..."
     $ git config --global log.date=auto:human
     ```
 
-    More about `auto:` in the [release notes][git-2.21.0].
+    More about `auto:` in the [Git 2.21.0 release notes].
 
 
 - `%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an, %cn>%Creset`
@@ -34,5 +34,6 @@ Choose one from below and set them with `git config --global format.pretty "..."
 
   Modified to show committer name
 
-[^git-2.21.0-rel]: [Git 2.21.0 release notes][git-2.21.0-rel]
-[git-2.21.0-rel]: https://github.com/git/git/blob/master/Documentation/RelNotes/2.21.0.txt#L78 "Git 2.21.0 release notes"
+[^git-2-21-0-rel]: [Git 2.21.0 release notes]
+
+[Git 2.21.0 release notes]: https://github.com/git/git/blob/master/Documentation/RelNotes/2.21.0.txt#L78 "Git 2.21.0 release notes"
