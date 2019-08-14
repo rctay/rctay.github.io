@@ -9,7 +9,7 @@ licence: Copyright © 2019 Ray. <a rel="license" href="http://creativecommons.or
 
 Choose one from below and set them with `git config --global format.pretty "..."`.
 
-- `%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an, %cn%C(reset)%C(bold yellow)%d%C(reset)`
+- `%C(bold blue)%h%C(reset) - %C(bold green)%ar%C(reset) %C(white)%s%C(reset) %C(dim white)- %an, %cn%C(reset)%C(bold yellow)%d%C(reset)`
 
   Source: <https://stackoverflow.com/a/9074343>
 
