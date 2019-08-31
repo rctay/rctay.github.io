@@ -24,5 +24,74 @@
         {{ content }}
       </div>
     </div>
+
+    <script type="text/javascript">
+function insertTagsInLoop(mastheadTitle) {
+  var headMarker = "{ ";
+  var tailMarker = " }";
+  var mastheadTitleContents = mastheadTitle.innerText;
+  var headMarkerIndex = mastheadTitleContents.indexOf(headMarker);
+  if (headMarkerIndex === -1) return;
+  var tailMarkerIndex = mastheadTitleContents.indexOf(tailMarker);
+  if (tailMarkerIndex === -1) return;
+  var soupContentsIndex = headMarkerIndex + headMarker.length;
+  var soupContents = mastheadTitleContents.slice(soupContentsIndex, tailMarkerIndex)
+    .split(' ');
+  var tagSoup = soupContents.map(function (s, index) {
+    return '<div>' + s.trim() + '</div>'
+  }).join('');
+  mastheadTitle.innerHTML =
+      '<div>' + mastheadTitleContents.slice(0, soupContentsIndex) + '</div>'
+      + '<div class="soup">' + tagSoup + '</div>'
+      + '<div class="tail">' + mastheadTitleContents.slice(tailMarkerIndex) + '</div>';
+}
+function wait(ms) {
+  return new Promise(r => setTimeout(r, ms));
+}
+function setupAnimation(element) {
+  var children = element.children;
+  var index = 0;
+  Array.prototype.slice.apply(children).forEach(function(child, i) {
+    if (i === 0) {
+      child.classList.remove('hidden');
+    } else {
+      child.classList.add('hidden');
+    }
+  });
+  element.classList.add('shrink');
+  setTimeout(keyframe1, 1500);
+  return;
+  function keyframe1() {
+    children[2].classList.remove("exiting-3rd");
+    children[0].classList.remove("entering-1st");
+    children[0].classList.add("exiting-1st");
+    children[1].classList.add("entering-2nd");
+    setTimeout(keyframe2, 2300);
+  }
+  function keyframe2() {
+    children[1].classList.remove("entering-2nd");
+    children[1].classList.add("exiting-2nd");
+    children[2].classList.add("entering-3rd");
+    setTimeout(keyframe3, 2300);
+  }
+  function keyframe3() {
+    children[1].classList.remove("exiting-2nd");
+    children[2].classList.remove("entering-3rd");
+    children[2].classList.add("exiting-3rd");
+    children[0].classList.remove("exiting-1st");
+    children[0].classList.add("entering-1st");
+    setTimeout(keyframe1, 2300);
+  }
+}
+
+window.onload = function() {
+  var mastheadTitle = document.querySelector('.masthead-title a[title]');
+  setTimeout(function() {
+    insertTagsInLoop(mastheadTitle);
+    var toAnimate = document.querySelector('.masthead-title a[title] .soup');
+    setTimeout(() => setupAnimation(toAnimate), 300);
+  }, 1000);
+};
+    </script>
   </body>
 </html>

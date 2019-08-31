@@ -17,8 +17,13 @@
       padding-right: 0;
     }
     .masthead-title {
-      display: unset;
+      display: flex;
+      flex-direction: row;
+      align-items: baseline;
       margin-left: 2.5rem;
+    }
+    .masthead-title small {
+      margin-left: 0.32em;
     }
     .post-footer {
       font-size: 0.8rem;
@@ -30,6 +35,81 @@
       margin: 0;
       border-radius: unset;
       height: 0.75em;
+    }
+
+    .masthead-title a[title] {
+      display: flex;
+      flex-direction: row;
+    }
+
+    .masthead-title a[title] .soup {
+      display: flex;
+      width: 7.87em;
+      transition: width 300ms ease;
+
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: clip;
+    }
+    .masthead-title a[title] .soup.shrink {
+      width: 2.8em;
+    }
+    .masthead-title a[title] .soup *:first-child {
+      padding-left: 0.25em;
+    }
+    .masthead-title a[title] .soup div {
+      padding-right: 0.25em;
+      opacity: 1;
+      transition: opacity 300ms ease;
+    }
+
+    .masthead-title a[title] .soup .hidden {
+      opacity: 0.001;
+    }
+
+    .masthead-title a[title] .tail {
+    }
+    .masthead-title a[title] .soup .exiting-1st {
+      animation: slideToLeft-1st ease 300ms forwards;
+    }
+    @keyframes slideToLeft-1st {
+      from { transform: translateX(0em); opacity: 1; }
+      to { transform: translateX(-2.405em); opacity: 0.01; }
+    }
+    .masthead-title a[title] .soup .entering-2nd {
+      animation: slideFromRight-2nd ease 300ms forwards;
+    }
+    @keyframes slideFromRight-2nd {
+      from { transform: translateX(0em); opacity: 0.01; }
+      to { transform: translateX(-2.405em); opacity: 1; }
+    }
+    .masthead-title a[title] .soup .exiting-2nd {
+      animation: slideToLeft-2nd ease 300ms forwards;
+    }
+    @keyframes slideToLeft-2nd {
+      from { opacity: 1; }
+      to { transform: translateX(-4.8em); opacity: 0.01; }
+    }
+    .masthead-title a[title] .soup .entering-3rd {
+      animation: slideFromRight-3rd ease 300ms forwards;
+    }
+    @keyframes slideFromRight-3rd {
+      from { transform: translateX(-2.405em); opacity: 0.01; }
+      to { transform: translateX(-5.05em); opacity: 1; }
+    }
+    .masthead-title a[title] .soup .exiting-3rd {
+      animation: slideToLeft-3rd ease 300ms forwards;
+    }
+    @keyframes slideToLeft-3rd {
+      from { opacity: 1; }
+      to { transform: translateX(-7.4em); opacity: 0.01; }
+    }
+    .masthead-title a[title] .soup .entering-1st {
+      animation: slideFromRight-1st ease 300ms forwards;
+    }
+    @keyframes slideFromRight-1st {
+      from { transform: translateX(2.405em); opacity: 0.01; }
+      to { transform: translateX(0em); opacity: 1; }
     }
   </style>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
