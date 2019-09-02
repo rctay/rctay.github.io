@@ -28,3 +28,22 @@ $ gpgconf --kill gpg-agent
 ```
 
 Adapted from: <https://www.bootc.net/archives/2013/06/09/my-perfect-gnupg-ssh-agent-setup/>
+
+# on Windows
+
+```console
+# Setup gpg-agent
+$ echo enable-putty-support > $APPDATA/gnupg/gpg-agent.conf
+# Start gpg-agent daemon
+$ gpg ...
+# Accept host key in PuTTY
+$ plink git@github.com
+# clone
+$ GIT_SSH_COMMAND=plink git clone git@github.com:...
+```
+
+# using side-by-side with Krypton
+
+Krypton sets up `~/.ssh/config`. We need to tell `git` to use `ssh` without that config file, via `-F`.
+
+1. `GIT_SSH_COMMAND='ssh -F /dev/null' git clone git@github.com:...`
