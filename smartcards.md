@@ -13,6 +13,8 @@ echo pinentry-program /usr/local/bin/pinentry-mac >> ~/.gnupg/gpg-agent.conf
 
 # usage
 ```console
+# first time on new computer
+$ gpg --recv-keys C0023FA0
 # first run
 $ eval $(gpg-agent --daemon --enable-ssh-support)
 # subsequent run
