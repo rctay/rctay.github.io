@@ -8,9 +8,6 @@ layout: default
     <time class="post-date" datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">
       {{- page.date | date_to_string -}}
     </time>
-    {%- if page.author -%}
-    &nbsp; • &nbsp;<span itemprop="author" itemscope itemtype="http://schema.org/Person"><span class="post-author" itemprop="name">{{ page.author | escape }}</span></span>
-    {%- endif -%}
   </p>
   {{ content }}
 
