@@ -13,7 +13,7 @@ Source: https://stackoverflow.com/a/44696931
 {% for count_with_tag in counts_with_tags %}
   {% assign tag = count_with_tag | split:":" | last %}
   {% assign count = site.tags[tag] | size %}
-  <h2 name="{{ tag | slugify }}">{{ tag }} ({{ count }} posts)</h2>
+  <h2 id="{{ tag | slugify }}">{{ tag }} ({{ count }} posts)</h2>
   <ul>
   {% for post in site.tags[tag] %}
     <li><a href="{{ post.url }}">{{ post.title }}</a></li>
