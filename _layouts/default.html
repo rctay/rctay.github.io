@@ -62,22 +62,18 @@ function setupAnimation(element) {
   setTimeout(keyframe1, 1500);
   return;
   function keyframe1() {
-    children[2].classList.remove("exiting-3rd");
     children[0].classList.remove("entering-1st");
     children[0].classList.add("exiting-1st");
     children[1].classList.add("entering-2nd");
-    setTimeout(keyframe2, 2300);
+    setTimeout(() => children[1].classList.remove("entering-2nd"), 2600);
+    setTimeout(keyframe2, 2000);
   }
   function keyframe2() {
-    children[1].classList.remove("entering-2nd");
-    children[1].classList.add("exiting-2nd");
     children[2].classList.add("entering-3rd");
-    setTimeout(keyframe3, 2300);
+    setTimeout(() => children[2].classList.remove("entering-3rd"), 2600);
+    setTimeout(keyframe3, 2000);
   }
   function keyframe3() {
-    children[1].classList.remove("exiting-2nd");
-    children[2].classList.remove("entering-3rd");
-    children[2].classList.add("exiting-3rd");
     children[0].classList.remove("exiting-1st");
     children[0].classList.add("entering-1st");
     setTimeout(keyframe1, 2300);

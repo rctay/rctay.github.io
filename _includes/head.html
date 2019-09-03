@@ -70,35 +70,33 @@
     .masthead-title a[title] .tail {
     }
     .masthead-title a[title] .soup .exiting-1st {
-      animation: slideToLeft-1st ease 300ms forwards;
+      animation: ease 300ms forwards slideToLeft-1st;
     }
     @keyframes slideToLeft-1st {
       from { transform: translateX(0em); opacity: 1; }
       to { transform: translateX(-2.405em); opacity: 0.01; }
     }
     .masthead-title a[title] .soup .entering-2nd {
-      animation: slideFromRight-2nd ease 300ms forwards;
+      animation:
+        ease 300ms forwards slideFromRight-2nd,
+        ease 300ms 2000ms forwards slideToLeft-2nd;
     }
     @keyframes slideFromRight-2nd {
       from { transform: translateX(0em); opacity: 0.01; }
       to { transform: translateX(-2.405em); opacity: 1; }
-    }
-    .masthead-title a[title] .soup .exiting-2nd {
-      animation: slideToLeft-2nd ease 300ms forwards;
     }
     @keyframes slideToLeft-2nd {
       from { opacity: 1; }
       to { transform: translateX(-4.8em); opacity: 0.01; }
     }
     .masthead-title a[title] .soup .entering-3rd {
-      animation: slideFromRight-3rd ease 300ms forwards;
+      animation:
+        ease 300ms forwards slideFromRight-3rd,
+        ease 300ms 2000ms forwards slideToLeft-3rd;
     }
     @keyframes slideFromRight-3rd {
       from { transform: translateX(-2.405em); opacity: 0.01; }
       to { transform: translateX(-5.05em); opacity: 1; }
-    }
-    .masthead-title a[title] .soup .exiting-3rd {
-      animation: slideToLeft-3rd ease 300ms forwards;
     }
     @keyframes slideToLeft-3rd {
       from { opacity: 1; }
