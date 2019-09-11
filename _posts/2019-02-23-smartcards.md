@@ -106,4 +106,6 @@ Adapted from: <https://www.bootc.net/archives/2013/06/09/my-perfect-gnupg-ssh-ag
 
 Krypton sets up `~/.ssh/config`. We need to tell `git` to use `ssh` without that config file, via `-F`.
 
-1. `GIT_SSH_COMMAND='ssh -F /dev/null' git clone git@github.com:...`
+```console
+GIT_SSH_COMMAND='ssh -F /dev/null' git clone git@github.com:...
+```
