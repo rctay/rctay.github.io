@@ -22,7 +22,7 @@ Choose one from below and set them with `git config --global format.pretty "..."
     `%ad` respects a date format you pass in by `--date` - or the `log.date` format, so we set it:
 
     ```console
-    $ git config --global log.date=auto:human
+    $ git config --global log.date auto:human
     ```
 
     More about `auto:` in the [Git 2.21.0 release notes].
