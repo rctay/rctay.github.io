@@ -7,7 +7,7 @@ licence: Copyright © 2019 Ray. <a rel="license" href="http://creativecommons.or
 
 # setup on mac
 
-- Use pinentry, a nice UI for pin entry. Otherwise the curses password entry
+- Use pinentry, a nice UI for pin entry. Otherwise the curses[^curses] password entry
   unexpectedly waits for password in some other terminal (namely the one you
   started gpg-agent in...)
 
@@ -15,6 +15,8 @@ licence: Copyright © 2019 Ray. <a rel="license" href="http://creativecommons.or
   $ brew install gpg pinentry-mac
   $ echo pinentry-program /usr/local/bin/pinentry-mac >> ~/.gnupg/gpg-agent.conf
   ```
+
+[^curses]: <https://en.wikipedia.org/wiki/Curses_(programming_library)>
 
 # usage
 
