@@ -5,36 +5,35 @@ tags: git
 licence: Copyright © 2019 Ray. <a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons Attribution 4.0 International License" src="https://i.creativecommons.org/l/by/4.0/80x15.png" /></a>
 ---
 
-# log formats
+# log format
 
-Choose one from below and set them with `git config --global format.pretty "..."`.
+```console
+$ git config --global log.date auto:human
+$ git config --global format.pretty "%C(bold blue)%h%C(reset) - %C(bold green)%ad%C(reset) %C(white)%s%C(reset) %C(dim white)- %an, %cn%C(reset)%C(bold yellow)%d%C(reset)"
+```
 
-- `%C(bold blue)%h%C(reset) - %C(bold green)%ar%C(reset) %C(white)%s%C(reset) %C(dim white)- %an, %cn%C(reset)%C(bold yellow)%d%C(reset)`
+Since git 2.21.0, git supports a "human" pretty format for dates[^git-2-21-0-rel], so use `%ad` in place of `%ar` in
+the original. `%ad` respects a date format you pass in by `--date` - or the `log.date` format, so we set that config,
+and rely on it and use the `%ad` placeholder, instead of prescribing a particular date format with placeholders like
+`%ar` (relative dates), `%aD` (RFC2822 style)), etc.
+
+Additionally, we use `auto:` so we only use this human format when output `isatty()`; ibid [^git-2-21-0-rel].
+
+- Adapted from:
+
+  `%C(bold blue)%h%C(reset) - %C(bold green)%ar%C(reset) %C(white)%s%C(reset) %C(dim white)- %an, %cn%C(reset)%C(bold yellow)%d%C(reset)`
 
   Source: <https://stackoverflow.com/a/9074343>
 
   Modified to show committer name
 
-  - Since git 2.21.0, git supports a "human" pretty format for dates[^git-2-21-0-rel], so use `%ad` in place of `%ar`:
+- Other log formats:
 
-    `%C(bold blue)%h%C(reset) - %C(bold green)%ad%C(reset) %C(white)%s%C(reset) %C(dim white)- %an, %cn%C(reset)%C(bold yellow)%d%C(reset)`
+  - `%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an, %cn>%Creset`
 
-    `%ad` respects a date format you pass in by `--date` - or the `log.date` format, so we set that config, and rely
-    on it and use the `%ad` placeholder, instead of prescribing a particular date format with placeholders like `%ar`
-    (relative dates), `%aD` (RFC2822 style)), etc.
+    Source: glol from oh-my-zsh
 
-    Additionally, we use `auto:` so we only use this human format when output `isatty()`; ibid [^git-2-21-0-rel].
-
-    ```console
-    $ git config --global log.date auto:human
-    ```
-
-
-- `%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an, %cn>%Creset`
-
-  Source: glol from oh-my-zsh
-
-  Modified to show committer name
+    Modified to show committer name
 
 [^git-2-21-0-rel]: [Git 2.21.0 release notes]
 
