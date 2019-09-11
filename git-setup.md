@@ -19,13 +19,15 @@ Choose one from below and set them with `git config --global format.pretty "..."
 
     `%C(bold blue)%h%C(reset) - %C(bold green)%ad%C(reset) %C(white)%s%C(reset) %C(dim white)- %an, %cn%C(reset)%C(bold yellow)%d%C(reset)`
 
-    `%ad` respects a date format you pass in by `--date` - or the `log.date` format, so we set it:
+    `%ad` respects a date format you pass in by `--date` - or the `log.date` format, so we set that config, and rely
+    on it and use the `%ad` placeholder, instead of prescribing a particular date format with placeholders like `%ar`
+    (relative dates), `%aD` (RFC2822 style)), etc.
+
+    Additionally, we use `auto:` so we only use this human format when output `isatty()`; ibid [^git-2-21-0-rel].
 
     ```console
     $ git config --global log.date auto:human
     ```
-
-    More about `auto:` in the [Git 2.21.0 release notes].
 
 
 - `%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an, %cn>%Creset`
