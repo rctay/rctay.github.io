@@ -25,6 +25,9 @@ I found these guides to be useful when I was getting started:
 
   Useful usage examples for signing, encrypting, etc.
 
+> Wondering about how long your password/passphrase should be? Read more about it on [entropy of passwords]({% post_url 2019-01-23-entropy-of-passwords %}).
+{: class="highlight"}
+
 # setup on mac
 
 - Use pinentry, a nice UI for pin entry. Otherwise the curses[^curses] password entry
