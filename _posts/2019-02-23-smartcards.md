@@ -9,19 +9,19 @@ licence: Copyright © 2019 Ray. <a rel="license" href="http://creativecommons.or
 
 I found these guides to be useful when I was getting started:
 
-- https://raymii.org/s/articles/Nitrokey_Start_Getting_started_guide.html
+- <https://raymii.org/s/articles/Nitrokey_Start_Getting_started_guide.html>
 
   Targets the particular hardware I'm using, the Nitrokey Start.
 
-- https://www.gniibe.org/memo/software/gpg/keygen-25519.html
+- <https://www.gniibe.org/memo/software/gpg/keygen-25519.html>
 
   Ed25519 keys are relatively new. The console logs, coupled with the author's comments, made this very useful.
 
-- https://alexcabal.com/creating-the-perfect-gpg-keypair
+- <https://alexcabal.com/creating-the-perfect-gpg-keypair>
 
   Covers the lifecycle of keys from generating, backing up, and revoking them (in the worst case scenario!).
 
-- https://shankarkulumani.com/2019/03/gpg.html
+- <https://shankarkulumani.com/2019/03/gpg.html>
 
   Useful usage examples for signing, encrypting, etc.
 
