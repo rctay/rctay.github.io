@@ -15,7 +15,7 @@ Choose one from below and set them with `git config --global format.pretty "..."
 
   Modified to show committer name
 
-  - Since git 2.21.0, git supports a `human` pretty format for dates[^git-2-21-0-rel], so use `%ad` in place of `%ar`:
+  - Since git 2.21.0, git supports a "human" pretty format for dates[^git-2-21-0-rel], so use `%ad` in place of `%ar`:
 
     `%C(bold blue)%h%C(reset) - %C(bold green)%ad%C(reset) %C(white)%s%C(reset) %C(dim white)- %an, %cn%C(reset)%C(bold yellow)%d%C(reset)`
 
