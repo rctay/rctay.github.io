@@ -64,7 +64,9 @@ Adapted from: <https://www.bootc.net/archives/2013/06/09/my-perfect-gnupg-ssh-ag
 - Start gpg-agent daemon
 
   ```console
-  $ gpg ...
+  $ gpg --card-edit
+  ...
+  > quit
   ```
 - Accept host key in PuTTY
 
