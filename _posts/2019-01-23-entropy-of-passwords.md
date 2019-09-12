@@ -16,7 +16,7 @@ Source: <https://en.wikipedia.org/wiki/Password_strength>
 
 # Question: what is the recommended number of entropy bits?
 
-- RFC 4086 "Randomness Requirements for Security
+- [RFC 4086 "Randomness Requirements for Security"](https://tools.ietf.org/html/rfc4086)
 
 - Depends on threat model
   - 29 bits: only online attacks
