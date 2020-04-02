@@ -43,39 +43,32 @@ I found these guides to be useful when I was getting started:
 
 # usage
 
-- first time on new computer:
+- For the first time on a new computer,
 
   ```console
   $ gpg --recv-keys C0023FA0
+  $ mkdir $(gpgconf --list-dirs homedir)
+  $ printf "pinentry-program %s\n" "$(which pinentry-mac)" >> $(gpgconf --list-dirs homedir)/gpg-agent.conf
   ```
-- first run: start gpg-agent
+
+- To start running ssh operations,
 
   ```console
-  $ eval $(gpg-agent --daemon --enable-ssh-support)
-  ```
-- check:
-
-  ```console
+  # start daemon
+  $ gpg --card-edit
+  # tell ssh to use gpg as the authentication agent
+  $ export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
+  # check
   $ ssh-add -l
+  256 SHA256:11112222aaaabbbb11112222aaaa4EF+qbZw/JZ5OYU cardno:FFFE12345566 (ED25519)
   ```
 
-You can now profit and run your ssh operations.
-
-- subsequent run, if in another terminal:
-
-  ```console
-  $ unset GPG_AGENT_INFO SSH_AGENT_PID SSH_AUTH_SOCK
-  $ export SSH_AUTH_SOCK=~/.gnupg/S.gpg-agent.ssh
-  ```
-- if wonky,
+- If wonky,
 
   ```console
   $ gpgconf --kill gpg-agent
+  $ gpg --card-edit
   ```
-
-  ...then run instructions in 'first run'
-
-Adapted from: <https://www.bootc.net/archives/2013/06/09/my-perfect-gnupg-ssh-agent-setup/>
 
 # on Windows
 
