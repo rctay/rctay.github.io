@@ -39,12 +39,12 @@ fi
 
 ## Context
 
-Digging through the IntelliJ configuration didn't reveal anything that could solve this (like how the Mac Terminal app or iTerm has an option (geddit?) to treat Option keys as Esc/Meta keys.
+Digging through the IntelliJ configuration didn't reveal anything that could solve this, like how the Mac Terminal app or iTerm has an option (geddit?) to treat Option keys as Esc/Meta keys.
 
-Looking at the environment via `export` revealed a clue (`TERMINAL_EMULATOR="JetBrains-JediTerm"`), and some googling led to `/Contents/plugins/terminal/jediterm-bash.in`. [You can view the contents online as well.](https://github.com/JetBrains/intellij-community/blob/master/plugins/terminal/resources/jediterm-bash.in)
+Looking at the environment via `export` revealed a clue (`TERMINAL_EMULATOR="JetBrains-JediTerm"`), and some googling led to the file `/Contents/plugins/terminal/jediterm-bash.in`, which seems to be how IntelliJ initializes the terminal. [You can view the contents online here.](https://github.com/JetBrains/intellij-community/blob/master/plugins/terminal/resources/jediterm-bash.in)
 
 The above is just one approach after examining that init config; other approaches could be to define `JEDITERM_USER_RCFILE` and pointing it to a file with the above `bind` calls.
 
 ## Conclusion
 
-Did it work for you? Did you do it differently? (Let me know here](https://github.com/rctay/rctay.github.io/issues), I'd love to hear from you!
+Did it work for you? Did you do it differently? [Let me know here](https://github.com/rctay/rctay.github.io/issues), I'd love to hear from you!
