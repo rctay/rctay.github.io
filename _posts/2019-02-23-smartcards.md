@@ -28,28 +28,16 @@ I found these guides to be useful when I was getting started:
 > Wondering about how long your password/passphrase should be? Read more about it on [entropy of passwords]({% post_url 2019-01-23-entropy-of-passwords %}).
 {: class="highlight"}
 
-# setup on mac
+# Using Smartcards for SSH Authentication
 
-- Use pinentry, a nice UI for pin entry. Otherwise the curses[^curses] password entry
-  unexpectedly waits for password in some other terminal (namely the one you
-  started gpg-agent in...)
-
-  ```console
-  $ brew install gpg pinentry-mac
-  $ echo pinentry-program /usr/local/bin/pinentry-mac >> ~/.gnupg/gpg-agent.conf
-  ```
-
-[^curses]: <https://en.wikipedia.org/wiki/Curses_(programming_library)>
-
-# usage
-
-- For the first time on a new computer,
+- For the first time on a new computer, first install gpg:
 
   ```console
   $ gpg --recv-keys C0023FA0
   $ mkdir $(gpgconf --list-dirs homedir)
-  $ printf "pinentry-program %s\n" "$(which pinentry-mac)" >> $(gpgconf --list-dirs homedir)/gpg-agent.conf
   ```
+  
+  See the sections below for additional Mac and Windows steps to run, respectively.
 
 - To start running ssh operations,
 
@@ -70,13 +58,35 @@ I found these guides to be useful when I was getting started:
   $ gpg --card-edit
   ```
 
-# on Windows
+## Additional Setup on Mac
 
-- Setup gpg-agent:
+- Use pinentry, a nice UI for pin entry. Otherwise the curses[^curses] password entry
+  unexpectedly waits for password in some other terminal (namely the one you
+  started gpg-agent in...)
 
   ```console
-  $ echo enable-putty-support > $APPDATA/gnupg/gpg-agent.conf
+  # add-on to list of packages to install
+  $ brew install ... pinentry-mac
+  # receive keys and mkdir...
+  $ ...
+  # tell gpg to use pinentry-mac
+  $ printf "pinentry-program %s\n" "$(which pinentry-mac)" >> $(gpgconf --list-dirs homedir)/gpg-agent.conf
   ```
+
+  [^curses]: <https://en.wikipedia.org/wiki/Curses_(programming_library)>
+
+## Additional Setup on Windows
+
+Assuming you're using PuTTY as your ssh client, we can leverage gpg's support for PuTTY.
+
+- After installing, configure gpg to enable PuTTY support.
+
+  ```console
+  # receive keys and mkdir...
+  $ ...
+  $ echo enable-putty-support > $(gpgconf --list-dirs homedir)/gnupg/gpg-agent.conf
+  ```
+
 - Start gpg-agent daemon
 
   ```console
@@ -95,7 +105,7 @@ I found these guides to be useful when I was getting started:
   GIT_SSH_COMMAND=plink git clone git@github.com:...
   ```
 
-# using side-by-side with Krypton
+## Side-by-side with Krypton
 
 Krypton sets up `~/.ssh/config`. We need to tell `git` to use `ssh` without that config file, via `-F`.
 
