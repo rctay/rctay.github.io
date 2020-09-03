@@ -1,0 +1,15 @@
+---
+layout: default
+title: Drafts
+permalink:    /drafts/
+meta_robots:  noindex
+---
+
+<div class="posts">
+  {% assign drafts = site.drafts | sort: 'date' | reverse %}
+  <ul class="post">
+  {% for post in drafts %}
+    <li><a href="{{ post.url }}">{{ post.title }}</a></li>
+  {% endfor %}
+  </ul>
+</div>
