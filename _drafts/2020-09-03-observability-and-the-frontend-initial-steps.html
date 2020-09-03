@@ -1,0 +1,179 @@
+---
+title: "Observability and the frontend: initial steps"
+tags: observability
+licence: Copyright © 2020 Ray. <a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons Attribution 4.0 International License" src="https://i.creativecommons.org/l/by/4.0/80x15.png" /></a>
+layout: revealjs-white
+---
+
+# Observability, frontend
+
+Note:
+Observability is popular right now in the world of microservices. For those of us working on user-facing web applications, we might have a JavaScript frontend in, say, React or Angular, that fires off calls to those systems. But, despite being the starting point of backend work, there aren't any integrations on the browser-side, compared to the backend side of things (eg. Spring, ASP.NET Core). In this talk, I'll walk through the pieces you need for Wavefront integration on the browser-side. If anything, just come for the pretty graphs!
+
+Agenda:
+- Introduction
+
+- How to do it?
+  - backend setup
+    - you can see requests to external systems, eg. Google authentication
+  - frontend setup
+    1. track it via a context
+    2. report it
+    3. propagate it
+
+- What does it look like?
+
+- hopefully this opens
+
+Further work:
+- What should I instrument?
+- Why do I need observability?
+- What makes a good trace?
+- wavefront over zipkin / prometheus?
+  - in the first place, what are the latter?
+
+---
+
+# Introduction
+
+
+## What is observability?
+
+
+## Monitoring = Observability?
+
+
+## Monitoring
+- identify symptoms of a problem ("error rate is up")
+- USE: utilization (free memory), saturation (CPU run queue length), errors
+- RED: request rate, error rate, duration of request
+
+
+## Observability
+
+![Observability definition on Twitter]({{ "/public/img/2020-09-03-observability-and-the-frontend-initial-steps/Observability-definition-twitter.png" | relative_url}}) <!-- .element: style="max-width: 60%" -->
+
+---
+
+# Walkthrough
+
+
+## What you'll need
+
+- A Wavefront instance: https://vmware.wavefront.com/
+- API key: https://vmware.wavefront.com/userprofile/apiaccess
+
+
+## Backend: the easy part
+
+![Table of Wavefront SDKs]({{ "/public/img/2020-09-03-observability-and-the-frontend-initial-steps/Wavefront-sdks-table.png" | relative_url}}) <!-- .element: style="max-width: 60%" -->
+
+
+- Pretty straightforward, pick the appropriate SDK for your backend
+- Wire it up to the Wavefront instance and API key
+
+Note:
+I'll first start with the easy part, which is wiring up the backend.
+
+
+Out-of-the-box:
+- report an incoming API request as a span
+- report an outgoing HTTP calls as a span
+- (bonus) metrics eg. request rate, errors
+
+
+- correlate those spans to a parent span
+- propagation in OpenTracing terminology
+- we'll need to set these headers when making an API request
+
+```
+wf-ot-...
+```
+
+
+## Frontend: the hard part
+
+What do we need?
+- Identify unit of work to be a trace/span
+- Create a trace/span
+- Report that trace/span to Wavefront
+- Associate that trace/span with related work
+
+
+### Identify unit of work to be a trace/span
+
+![Example of trace and spans from Wavefront]({{ "/public/img/2020-09-03-observability-and-the-frontend-initial-steps/wavefront-tracing_trace_spans.png" | relative_url}})
+
+
+### Trace
+
+> A trace shows you how a particular request propagates through your application or among a set of services.
+
+eg. shopping request
+
+
+### Span
+
+> A...trace consists of one or more spans, which are the individual segments of work in the trace.
+
+eg. Printing.printShirts, Packaging.giftWrap
+
+
+### Navigations
+
+- Routing (in your favourite framework)
+  - `@angular/router`
+  - `react-router-dom`
+- `/welcome`: start one trace/span
+- `/about`: start another trace/span
+
+
+![Tutorial: Adding distributed tracing instrumentation]({{ "/public/img/2020-09-03-observability-and-the-frontend-initial-steps/Tutorial-Adding-distributed-tracing-instrumentation.png" | relative_url}})
+
+Note:
+The inspiration for this.
+
+
+### Create a trace/span
+- aoeu
+
+
+### Report that trace/span to Wavefront
+- aoeu
+
+
+### Associate that trace/span with related work
+- aeou
+
+---
+
+# Conclusion
+
+Note:
+Hopefully you are now able to have a more complete picture of work in your system.
+
+---
+
+## References
+
+1. Observability - A 3-Year Retrospective https://thenewstack.io/observability-a-3-year-retrospective/
+
+   - The ‘00s Spawned a New Vendor Breed: APM
+   - Cardinality and Its Relation to Complex Distributed Systems
+     - Without Access to High Cardinality Data, Good Luck Debugging
+   - What Observability Looks Like in Practice
+   - Observability and Its Progenitors
+   - How Observability’s Purpose and Value Have Been Misrepresented
+   - The Future of Observability
+   - Engage in Constant Conversation with Your Code
+   - For Engineers … but also Engineering-adjacent Teams
+
+2. https://medium.com/@copyconstruct/monitoring-and-observability-8417d1952e1c
+
+   - Baby’s first Observability
+   - Monitoring is for symptom based Alerting
+   - And then there’s “Observability”
+   - Debugging
+   - Context Matters
+   - One last thing
+

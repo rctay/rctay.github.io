@@ -1,0 +1,39 @@
+<html>
+	<head>
+		<link rel="stylesheet" href="{{ "/public/revealjs/css/reveal.css" | relative_url }}">
+		<link rel="stylesheet" href="{{ "/public/revealjs/css/theme/white.css" | relative_url }}">
+		<link rel="stylesheet" href="{{ "/public/revealjs/plugin/highlight/github.css" | relative_url }}">
+		<style type="text/css">
+			.reveal section img {
+				border: none;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+                <section
+                    data-markdown
+					data-separator-vertical="^\n\n"
+                >
+                    <textarea data-template>{{ content }}</textarea>
+                </section>
+			</div>
+		</div>
+		<script src="{{ "/public/revealjs/js/reveal.js" | relative_url }}"></script>
+		<script src="{{ "/public/revealjs/plugin/markdown/marked.js" | relative_url }}"></script>
+		<script src="{{ "/public/revealjs/plugin/markdown/markdown.js" | relative_url }}"></script>
+		<script src="{{ "/public/revealjs/plugin/notes/notes.js" | relative_url }}"></script>
+		<script src="{{ "/public/revealjs/lib/js/head.min.js" | relative_url }}"></script>
+		<script>
+			Reveal.initialize({
+				slideNumber: true,
+				hash: true,
+				history: true,
+				dependencies: [
+				{ src: '{{ "/public/revealjs/plugin/highlight/highlight.js" | relative_url }}', async: true, callback: () => hljs.initHighlightingOnLoad() }
+				]
+			});
+		</script>
+	</body>
+</html>

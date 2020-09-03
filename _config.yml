@@ -39,7 +39,9 @@ collections:
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list
 # to override the default setting.
-# exclude:
+exclude:
+  - public/revealjs/css/theme/README.md
+  - public/revealjs/plugin/markdown/example.md
 #   - Gemfile
 #   - Gemfile.lock
 #   - node_modules
