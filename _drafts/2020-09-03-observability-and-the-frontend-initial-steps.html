@@ -64,6 +64,58 @@ Source: https://twitter.com/mipsytipsy/status/1231833240433917952
 
 ---
 
+# Breaking it down
+
+Let's identify the unit of work to be a trace/span
+
+
+### Trace
+
+> A trace shows you how a particular request propagates through your application or among a set of services.
+
+eg. shopping request
+
+
+### Span
+
+> A...trace consists of one or more spans, which are the individual segments of work in the trace.
+
+eg. Printing.printShirts, Packaging.giftWrap
+
+
+![Example of trace and spans from Wavefront]({{ "/public/img/2020-09-03-observability-and-the-frontend-initial-steps/wavefront-tracing_trace_spans.png" | relative_url}})
+
+
+### Identify unit of work to be a trace/span
+
+What is the appropriate level of granularity?
+
+
+### Navigations
+
+- Routing (in your favourite framework)
+  - `@angular/router`
+  - `react-router-dom`
+- `/welcome`: start one trace/span
+- `/about`: start another trace/span
+
+Note:
+I'll assume most people are familiar with routing in Single-page applications. One blob of html gets sent to the browser when the user first visits the page, subsequently you might go to different "pages", but the browser isn't retrieving from scratch a separate HTML, CSS, JS, it is still the same initial blob when you first visited the page. You might see different urls in the url bar, but its the code (or frontend application) in the browser that is handling these, changing what gets displayed.
+
+The idea is we just send a single blob of HTML, CSS, JS once to the browser, so we can give the user a seamless or even native feel, because any pages or data that's need are retrieved in the background, the user doesn't see a "whiteout" in the browser which you get when loading a separate page of HTML, CSS, JS. On the developer side, it opens new possibilities, like how we can preserve data or state between different pages, which is not easily done or even possible when different pages get loaded.
+
+
+![Tutorial: Adding distributed tracing instrumentation]({{ "/public/img/2020-09-03-observability-and-the-frontend-initial-steps/Tutorial-Adding-distributed-tracing-instrumentation.png" | relative_url}})
+
+Note:
+The inspiration for this.
+
+### Backend calls
+
+- API calls are child spans of the navigation span.
+
+---
+
 # Walkthrough
 
 
@@ -107,40 +159,6 @@ What do we need?
 - Create a trace/span
 - Report that trace/span to Wavefront
 - Associate that trace/span with related work
-
-
-### Identify unit of work to be a trace/span
-
-![Example of trace and spans from Wavefront]({{ "/public/img/2020-09-03-observability-and-the-frontend-initial-steps/wavefront-tracing_trace_spans.png" | relative_url}})
-
-
-### Trace
-
-> A trace shows you how a particular request propagates through your application or among a set of services.
-
-eg. shopping request
-
-
-### Span
-
-> A...trace consists of one or more spans, which are the individual segments of work in the trace.
-
-eg. Printing.printShirts, Packaging.giftWrap
-
-
-### Navigations
-
-- Routing (in your favourite framework)
-  - `@angular/router`
-  - `react-router-dom`
-- `/welcome`: start one trace/span
-- `/about`: start another trace/span
-
-
-![Tutorial: Adding distributed tracing instrumentation]({{ "/public/img/2020-09-03-observability-and-the-frontend-initial-steps/Tutorial-Adding-distributed-tracing-instrumentation.png" | relative_url}})
-
-Note:
-The inspiration for this.
 
 
 ### Create a trace/span
