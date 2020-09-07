@@ -124,8 +124,13 @@ If you take a look at the diagram, we have a number of spans, and they are all t
 ### Hatching a Plan
 
 - for every navigation, start a trace
+  -
   - for any API calls, associate them to this trace
     - for any outgoing HTTP calls to external services, associate them to this trace
+
+### Alternatives
+
+-
 
 ---
 
@@ -179,6 +184,11 @@ The SDKs are also able to pick up http headers, so that it can associate API req
 
 ## Navigation
 
+- subscribe to routing events
+- NavigationStart: generate new trace ID, start span representing unit of work of
+- NavigationEnd: end
+-
+
 ```typescript
 import { Router, NavigationStart, NavigationEnd } from '@angular/router';
 import { WavefrontTracerService } from './wavefront-tracer.service';
@@ -209,121 +219,75 @@ export class RoutingSubscriber {
 ### Reporting
 
 ```typescript
-import { Injectable, Inject } from '@angular/core';
-import { WavefrontDirectClient, tracingSpanToLineData } from '@rctay/wavefront-sdk-javascript';
+import { WavefrontDirectClient } from 'wavefront-sdk-javascript';
 import { v4 as uuidv4 } from 'uuid';
-import { WAVEFRONT_CLIENT } from './wavefront-direct-client.provider';
-import { WindowRef } from '../support/window-ref/window-ref';
-import { environment } from '../../environments/environment';
 
-@Injectable()
 export class WavefrontTracerService {
-
-  private activeTraceId: string;
-  private activeSpanId: string;
-
-  constructor(
-    @Inject(WAVEFRONT_CLIENT) private client: WavefrontDirectClient
-  ) { }
-
   startSpan() {
     this.activeTraceId = uuidv4();
     this.activeSpanId = uuidv4();
-    performance.mark('start span');
+    this.startTime = new Date().getTime();
   }
 
   endSpan(operationName: string, additionalTags = {}) {
-    const measureName = `measure navigation`;
-    performance.measure('measure', 'start span');
-    const matchingMeasures = performance.getEntriesByName(measureName);
-    const measure = matchingMeasures[matchingMeasures.length - 1];
-
     this.client.sendSpan(
       operationName,
-      Math.round(new Date().getTime() - measure.duration), // start time
-      Math.round(measure.duration),
-      environment.observability.source,
+      this.startTime,
+      new Date().getTime() - this.startTime,
+      'teamup.cfapps.io', // source
       this.activeTraceId,
       this.activeSpanId,
-      null,
-      null,
+      null, // parent span IDs
+      null, // follows from
       [
-        ['application', environment.observability.application],
-        ['service', environment.observability.service],
+        ['application', 'teamup'],
+        ['service', 'frontend'],
         ...Object.entries(additionalTags)
       ],
-      null,
-      null
+      null // span logs
     );
   }
-}
-```
-
-
-### Associate that trace/span with related work
-
-```typescript
-import { Injectable, Inject } from '@angular/core';
-import { WavefrontDirectClient, tracingSpanToLineData } from '@rctay/wavefront-sdk-javascript';
-import { v4 as uuidv4 } from 'uuid';
-import { WAVEFRONT_CLIENT } from './wavefront-direct-client.provider';
-import { WindowRef } from '../support/window-ref/window-ref';
-import { environment } from '../../environments/environment';
-
-@Injectable()
-export class WavefrontTracerService {
 
   private activeTraceId: string;
   private activeSpanId: string;
+  private startTime: number;
 
-  getActiveTraceId() {
-    return this.activeTraceId;
-  }
+  constructor(private client: WavefrontDirectClient) { }
+}
+```
 
-  getActiveSpanId() {
-    return this.activeSpanId;
-  }
+<!-- .element: style="font-size: 0.3em" -->
 
-  constructor(
-    @Inject(WAVEFRONT_CLIENT) private client: WavefrontDirectClient,
-    private windowRef: WindowRef
-  ) { }
 
-  startSpan() {
-    this.activeTraceId = uuidv4();
-    this.activeSpanId = uuidv4();
-    this.windowRef.getPerformance().mark('span-start');
-  }
+### Associating
 
-  endSpan(operationName: string, additionalTags = {}) {
-    const measureName = `span-${operationName}`;
-    this.windowRef.getPerformance().measure(measureName, 'span-start');
-    const matchingMeasures = this.windowRef.getPerformance().getEntriesByName(measureName, 'measure');
-    const measure = matchingMeasures[matchingMeasures.length - 1];
+```typescript
+import { WavefrontTracerService } from './wavefront-tracer.service';
+import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
-    if (environment.observability.enabled) {
-      const lineData = tracingSpanToLineData(
-        operationName,
-        Math.round(new Date().getTime() - measure.duration),
-        Math.round(measure.duration),
-        environment.observability.source,
-        this.activeTraceId,
-        this.activeSpanId,
-        null,
-        null,
-        [
-          ['application', environment.observability.application],
-          ['service', environment.observability.service],
-          ...Object.entries(additionalTags)
-        ],
-        null,
-        null
-      );
-      this.client.sendSpanNow([lineData]);
-    }
+/** Based on: TextMapPropagator in https://github.com/wavefrontHQ/wavefront-opentracing-sdk-java/ */
+const BAGGAGE_PREFIX = 'wf-ot-';
+const TRACE_ID = `${BAGGAGE_PREFIX}traceid`;
+const SPAN_ID = `${BAGGAGE_PREFIX}spanid`;
+
+export class WavefrontHttpInjectorService implements HttpInterceptor {
+  constructor(private tracer: WavefrontTracerService) { }
+
+  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    const updatedReq = req.clone({
+      setHeaders: {
+        [TRACE_ID]: this.tracer.getActiveTraceId(),
+        [SPAN_ID]: this.tracer.getActiveSpanId()
+      }
+    });
+
+    return next.handle(updatedReq);
   }
 }
 ```
+
+<!-- .element: style="font-size: 0.35em" -->
 
 ---
 
