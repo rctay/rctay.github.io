@@ -64,55 +64,68 @@ Source: https://twitter.com/mipsytipsy/status/1231833240433917952
 
 ---
 
-# Breaking it down
+# Background
 
-Let's identify the unit of work to be a trace/span
-
-
-### Trace
-
-> A trace shows you how a particular request propagates through your application or among a set of services.
-
-eg. shopping request
+Breaking down what we have, and what we need
 
 
-### Span
-
-> A...trace consists of one or more spans, which are the individual segments of work in the trace.
-
-eg. Printing.printShirts, Packaging.giftWrap
-
-
-![Example of trace and spans from Wavefront]({{ "/public/img/2020-09-03-observability-and-the-frontend-initial-steps/wavefront-tracing_trace_spans.png" | relative_url}})
-
-
-### Identify unit of work to be a trace/span
-
-What is the appropriate level of granularity?
-
-
-### Navigations
-
-- Routing (in your favourite framework)
-  - `@angular/router`
-  - `react-router-dom`
-- `/welcome`: start one trace/span
-- `/about`: start another trace/span
+<!-- .slide: data-background-image="{{ "/public/img/2020-09-03-observability-and-the-frontend-initial-steps/Youtube-spa-example.png" | relative_url}}" data-background-size="80%" -->
 
 Note:
+Let's take a closer look at a SPA, and see what kind of work is involved.
+
+For the main content - you could have one API call for that, eg.
+
+For the related videos - you might have some API call for that, to load 20 related videos.
+And to give a seamless browsing experience, without a "blank" browser background which you see when you request a totally new page with HTML, JS, CSS, your frontend can "trap" browser navigations, so although your URL shows a different URL, the browser didn't have to request a new page with new HTML, JS, CSS.
+
+## old
 I'll assume most people are familiar with routing in Single-page applications. One blob of html gets sent to the browser when the user first visits the page, subsequently you might go to different "pages", but the browser isn't retrieving from scratch a separate HTML, CSS, JS, it is still the same initial blob when you first visited the page. You might see different urls in the url bar, but its the code (or frontend application) in the browser that is handling these, changing what gets displayed.
 
 The idea is we just send a single blob of HTML, CSS, JS once to the browser, so we can give the user a seamless or even native feel, because any pages or data that's need are retrieved in the background, the user doesn't see a "whiteout" in the browser which you get when loading a separate page of HTML, CSS, JS. On the developer side, it opens new possibilities, like how we can preserve data or state between different pages, which is not easily done or even possible when different pages get loaded.
 
+Let's identify the unit of work to be a trace/span.
 
-![Tutorial: Adding distributed tracing instrumentation]({{ "/public/img/2020-09-03-observability-and-the-frontend-initial-steps/Tutorial-Adding-distributed-tracing-instrumentation.png" | relative_url}})
+
+### Navigations
+
+- `/overview`: one unit of work
+  - `GET /api/teams/31`: subunit of work
+  - `GET /api/members/47`: subunit of work
+- `/about`: another unit of work
 
 Note:
-The inspiration for this.
+...
 
-### Backend calls
+- Routing (in your favourite framework)
+  - `@angular/router`
+  - `react-router-dom`
 
-- API calls are child spans of the navigation span.
+So now we have a rough seed or a starting point - on how we can dilenate work in our system, our picture of the system will be broken up according to a page that the user visits. any
+
+
+### Tracing
+
+![Example of trace and spans from Wavefront]({{ "/public/img/2020-09-03-observability-and-the-frontend-initial-steps/wavefront-tracing_trace_spans.png" | relative_url}})
+
+Note:
+Now we have an idea of what the system looks like. Let's now take a look at the other side of things - what traces and spans are.
+If you take a look at the diagram, we have a number of spans, and they are all tied together, by a trace. We can also relate spans to one another. The way the tracing platform relates spans is through a parent-child relationship. So you can report the root span to the tracing platform, then let's say for a child span, GET-style/id/make, report the child span with a parent span ID of the root span. So if you login to the tracing platform UI, it will nicely tie them together, and show this nesting hierarchy.
+
+
+### Definitions
+
+- span: an individual unit of work
+  - eg. Printing.printShirts, Packaging.giftWrap
+- trace: an individual workflow, made up of one or more spans
+  - eg. shopping request
+
+
+### Hatching a Plan
+
+- for every navigation, start a trace
+  - for any API calls, associate them to this trace
+    - for any outgoing HTTP calls to external services, associate them to this trace
 
 ---
 
@@ -121,16 +134,17 @@ The inspiration for this.
 
 ## What you'll need
 
-- A Wavefront instance: https://vmware.wavefront.com/
-- API key: https://vmware.wavefront.com/userprofile/apiaccess
+- A Wavefront instance
+- An API key
 
+---
 
-## Backend: the easy part
+# Backend
 
 ![Table of Wavefront SDKs]({{ "/public/img/2020-09-03-observability-and-the-frontend-initial-steps/Wavefront-sdks-table.png" | relative_url}}) <!-- .element: style="max-width: 60%" -->
 
 
-- Pretty straightforward, pick the appropriate SDK for your backend
+- Pick the appropriate SDK for your backend stack
 - Wire it up to the Wavefront instance and API key
 
 Note:
@@ -139,7 +153,7 @@ I'll first start with the easy part, which is wiring up the backend.
 
 Out-of-the-box:
 - report an incoming API request as a span
-- report an outgoing HTTP calls as a span
+- report an outgoing HTTP calls as a span<br>
 - (bonus) metrics eg. request rate, errors
 
 
@@ -148,29 +162,168 @@ Out-of-the-box:
 - we'll need to set these headers when making an API request
 
 ```
-wf-ot-...
+wf-ot-traceid
+```
+
+Note:
+The SDKs are also able to pick up http headers, so that it can associate API requests to the backend with a parent span.
+
+---
+
+# Frontend
+
+- for every navigation, create a trace/span
+- report this trace to Wavefront
+- associate backend calls with this trace
+
+
+## Navigation
+
+```typescript
+import { Router, NavigationStart, NavigationEnd } from '@angular/router';
+import { WavefrontTracerService } from './wavefront-tracer.service';
+
+export class RoutingSubscriber {
+  constructor(private router: Router, private tracer: WavefrontTracerService) { }
+
+  subscribeToRouteEvents() {
+    this.router.events.subscribe(this.routerHandler.bind(this));
+  }
+
+  routerHandler(event: Event) {
+    if (event instanceof NavigationStart) {
+      this.tracer.startSpan();
+    } else if (event instanceof NavigationEnd) {
+      this.tracer.endSpan(
+        event.url, // operation name
+        this.route.snapshot.params // team = 'a-team'
+      );
+    }
+  }
+}
+```
+
+<!-- .element: style="font-size: 0.4em" -->
+
+
+### Reporting
+
+```typescript
+import { Injectable, Inject } from '@angular/core';
+import { WavefrontDirectClient, tracingSpanToLineData } from '@rctay/wavefront-sdk-javascript';
+import { v4 as uuidv4 } from 'uuid';
+import { WAVEFRONT_CLIENT } from './wavefront-direct-client.provider';
+import { WindowRef } from '../support/window-ref/window-ref';
+import { environment } from '../../environments/environment';
+
+@Injectable()
+export class WavefrontTracerService {
+
+  private activeTraceId: string;
+  private activeSpanId: string;
+
+  constructor(
+    @Inject(WAVEFRONT_CLIENT) private client: WavefrontDirectClient
+  ) { }
+
+  startSpan() {
+    this.activeTraceId = uuidv4();
+    this.activeSpanId = uuidv4();
+    performance.mark('start span');
+  }
+
+  endSpan(operationName: string, additionalTags = {}) {
+    const measureName = `measure navigation`;
+    performance.measure('measure', 'start span');
+    const matchingMeasures = performance.getEntriesByName(measureName);
+    const measure = matchingMeasures[matchingMeasures.length - 1];
+
+    this.client.sendSpan(
+      operationName,
+      Math.round(new Date().getTime() - measure.duration), // start time
+      Math.round(measure.duration),
+      environment.observability.source,
+      this.activeTraceId,
+      this.activeSpanId,
+      null,
+      null,
+      [
+        ['application', environment.observability.application],
+        ['service', environment.observability.service],
+        ...Object.entries(additionalTags)
+      ],
+      null,
+      null
+    );
+  }
+}
 ```
 
 
-## Frontend: the hard part
-
-What do we need?
-- Identify unit of work to be a trace/span
-- Create a trace/span
-- Report that trace/span to Wavefront
-- Associate that trace/span with related work
-
-
-### Create a trace/span
-- aoeu
-
-
-### Report that trace/span to Wavefront
-- aoeu
-
-
 ### Associate that trace/span with related work
-- aeou
+
+```typescript
+import { Injectable, Inject } from '@angular/core';
+import { WavefrontDirectClient, tracingSpanToLineData } from '@rctay/wavefront-sdk-javascript';
+import { v4 as uuidv4 } from 'uuid';
+import { WAVEFRONT_CLIENT } from './wavefront-direct-client.provider';
+import { WindowRef } from '../support/window-ref/window-ref';
+import { environment } from '../../environments/environment';
+
+@Injectable()
+export class WavefrontTracerService {
+
+  private activeTraceId: string;
+  private activeSpanId: string;
+
+  getActiveTraceId() {
+    return this.activeTraceId;
+  }
+
+  getActiveSpanId() {
+    return this.activeSpanId;
+  }
+
+  constructor(
+    @Inject(WAVEFRONT_CLIENT) private client: WavefrontDirectClient,
+    private windowRef: WindowRef
+  ) { }
+
+  startSpan() {
+    this.activeTraceId = uuidv4();
+    this.activeSpanId = uuidv4();
+    this.windowRef.getPerformance().mark('span-start');
+  }
+
+  endSpan(operationName: string, additionalTags = {}) {
+    const measureName = `span-${operationName}`;
+    this.windowRef.getPerformance().measure(measureName, 'span-start');
+    const matchingMeasures = this.windowRef.getPerformance().getEntriesByName(measureName, 'measure');
+    const measure = matchingMeasures[matchingMeasures.length - 1];
+
+    if (environment.observability.enabled) {
+      const lineData = tracingSpanToLineData(
+        operationName,
+        Math.round(new Date().getTime() - measure.duration),
+        Math.round(measure.duration),
+        environment.observability.source,
+        this.activeTraceId,
+        this.activeSpanId,
+        null,
+        null,
+        [
+          ['application', environment.observability.application],
+          ['service', environment.observability.service],
+          ...Object.entries(additionalTags)
+        ],
+        null,
+        null
+      );
+      this.client.sendSpanNow([lineData]);
+    }
+  }
+}
+```
 
 ---
 
