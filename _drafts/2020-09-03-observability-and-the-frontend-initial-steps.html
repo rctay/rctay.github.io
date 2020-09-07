@@ -14,7 +14,7 @@ September 2020<br>
 Ray / @rctay
 
 Note:
-Observability is popular right now in the world of microservices. For those of us working on user-facing web applications, we might have a JavaScript frontend in, say, React or Angular, that fires off calls to those systems. But, despite being the starting point of backend work, there aren't any integrations on the browser-side, compared to the backend side of things (eg. Spring, ASP.NET Core). In this talk, I'll walk through the pieces you need for Wavefront integration on the browser-side. If anything, just come for the pretty graphs!
+Observability is an upcoming trend, tracking the take-off of microservices. For those of us working on user-facing web applications, we might have a JavaScript frontend in, say, React or Angular, that fires off calls to those systems. But, despite being the starting point of backend work, there aren't any integrations on the browser-side, compared to the backend side of things (eg. Spring, ASP.NET Core). In this talk, I'll walk through the pieces you need for Wavefront integration on the browser-side. If anything, just come for the pretty graphs!
 
 Agenda:
 - Introduction
@@ -89,19 +89,20 @@ Let's identify the unit of work to be a trace/span.
 
 ### Navigations
 
-- `/overview`: one unit of work
-  - `GET /api/teams/31`: subunit of work
-  - `GET /api/members/47`: subunit of work
-- `/about`: another unit of work
+- `/overview`
+  - `GET /api/teams/31`
+  - `GET /api/members/47`
+- `/about`
 
 Note:
+
+So now we have a rough seed or a starting point - on how we can dilenate work in our system, our picture of the system will be broken up according to a page that the user visits. any
+
 ...
 
 - Routing (in your favourite framework)
   - `@angular/router`
   - `react-router-dom`
-
-So now we have a rough seed or a starting point - on how we can dilenate work in our system, our picture of the system will be broken up according to a page that the user visits. any
 
 
 ### Tracing
@@ -109,7 +110,8 @@ So now we have a rough seed or a starting point - on how we can dilenate work in
 ![Example of trace and spans from Wavefront]({{ "/public/img/2020-09-03-observability-and-the-frontend-initial-steps/wavefront-tracing_trace_spans.png" | relative_url}})
 
 Note:
-Now we have an idea of what the system looks like. Let's now take a look at the other side of things - what traces and spans are.
+Now we have an idea of what the system, single-page applicatinos, looks like. Let's now take a look at the other side of things - what traces and spans are.
+
 If you take a look at the diagram, we have a number of spans, and they are all tied together, by a trace. We can also relate spans to one another. The way the tracing platform relates spans is through a parent-child relationship. So you can report the root span to the tracing platform, then let's say for a child span, GET-style/id/make, report the child span with a parent span ID of the root span. So if you login to the tracing platform UI, it will nicely tie them together, and show this nesting hierarchy.
 
 
@@ -124,13 +126,8 @@ If you take a look at the diagram, we have a number of spans, and they are all t
 ### Hatching a Plan
 
 - for every navigation, start a trace
-  -
   - for any API calls, associate them to this trace
-    - for any outgoing HTTP calls to external services, associate them to this trace
-
-### Alternatives
-
--
+    - for any outgoing HTTP calls to external services made from within our API, associate them to this trace
 
 ---
 
@@ -149,6 +146,7 @@ If you take a look at the diagram, we have a number of spans, and they are all t
 ![Table of Wavefront SDKs]({{ "/public/img/2020-09-03-observability-and-the-frontend-initial-steps/Wavefront-sdks-table.png" | relative_url}}) <!-- .element: style="max-width: 60%" -->
 
 
+## SDKs
 - Pick the appropriate SDK for your backend stack
 - Wire it up to the Wavefront instance and API key
 
@@ -156,18 +154,20 @@ Note:
 I'll first start with the easy part, which is wiring up the backend.
 
 
-Out-of-the-box:
+## Provided out-of-the-box
 - report an incoming API request as a span
 - report an outgoing HTTP calls as a span<br>
 - (bonus) metrics eg. request rate, errors
 
 
-- correlate those spans to a parent span
-- propagation in OpenTracing terminology
-- we'll need to set these headers when making an API request
+## Propagation
+- span of an API request can be asssociated with a trace and a parent span specified in HTTP headers by SDK
+  - mental note: we'll need to set these headers on frontend when making an API request to our backend
+- crossing process boundaries, hence propagation
 
 ```
-wf-ot-traceid
+wf-ot-traceid: 1a2b3c4d-1839-4b39-a82a-ddb52a261e4d
+wf-ot-spanid: e5f6a7b8-2c39-429d-96ae-484a02db6220
 ```
 
 Note:
@@ -182,12 +182,28 @@ The SDKs are also able to pick up http headers, so that it can associate API req
 - associate backend calls with this trace
 
 
+## Navigation lifecycle in Angular
+
+- `NavigationStart`
+  - `GuardsCheckStart`: authorization / pending changes
+  - `GuardsCheckEnd`
+  - `ResolveStart`: pre-fetch data
+  - `ResolveEnd`
+- `NavigationEnd`
+
+
 ## Navigation
 
 - subscribe to routing events
-- NavigationStart: generate new trace ID, start span representing unit of work of
-- NavigationEnd: end
--
+- NavigationStart
+  - generate new trace ID
+  - start a span (root span)
+- NavigationEnd
+  - end off root span
+  - report to Wavefront
+
+
+## Navigation
 
 ```typescript
 import { Router, NavigationStart, NavigationEnd } from '@angular/router';
@@ -216,7 +232,19 @@ export class RoutingSubscriber {
 <!-- .element: style="font-size: 0.4em" -->
 
 
-### Reporting
+## Reporting
+
+- send trace/span information to platform (Wavefront)
+- trace ID
+- span ID
+- operation name
+- start time
+- duration
+- source eg. hostname
+- tags eg. application, service, `cluster=prod`
+
+
+## Reporting
 
 ```typescript
 import { WavefrontDirectClient } from 'wavefront-sdk-javascript';
@@ -259,7 +287,14 @@ export class WavefrontTracerService {
 <!-- .element: style="font-size: 0.3em" -->
 
 
-### Associating
+## Propagation
+
+- associate backend calls with trace
+- set HTTP headers `wf-ot-traceid` and `wf-ot-spanid`
+- "HTTP interceptors" in Angular
+
+
+## Propagation
 
 ```typescript
 import { WavefrontTracerService } from './wavefront-tracer.service';
@@ -295,6 +330,13 @@ export class WavefrontHttpInjectorService implements HttpInterceptor {
 
 Note:
 Hopefully you are now able to have a more complete picture of work in your system.
+
+
+## Alternatives
+
+- one `NavigationStart` to next `NavigationStart`?
+  - risk of nothing getting reported if user just stays on one page
+- session
 
 ---
 
