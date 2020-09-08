@@ -1,6 +1,9 @@
 ---
-title: "Observability and the frontend: initial steps"
-tags: observability
+title: "Observability and the frontend: initial steps (talk)"
+date: 2020-09-08 12:36:32 +0800
+tags:
+- observability
+- talks
 licence: Copyright © 2020 Ray. <a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons Attribution 4.0 International License" src="https://i.creativecommons.org/l/by/4.0/80x15.png" /></a>
 layout: revealjs-white
 ---
@@ -10,18 +13,18 @@ layout: revealjs-white
 ## Initial Steps
 
 <br>
-September 2020<br>
+8 September 2020<br>
 Ray / @rctay
 
 Note:
-Observability is an upcoming trend, tracking the take-off of microservices. For those of us working on user-facing web applications, we might have a JavaScript frontend in, say, React or Angular, that fires off calls to those systems. But, despite being the starting point of backend work, there aren't any integrations on the browser-side, compared to the backend side of things (eg. Spring, ASP.NET Core). In this talk, I'll walk through the pieces you need for Wavefront integration on the browser-side. If anything, just come for the pretty graphs!
+Observability is an upcoming trend, tracking the take-off of microservices. For those of us working on user-facing web applications, we might have a JavaScript frontend in, say, React or Angular, that fires off calls to those systems. But, despite being the starting point of work in the backend, there is a dearth of integrations on the browser-side, compared to the backend side of things (eg. Spring, ASP.NET Core). In this talk, I'll walk through the pieces you need for browser-side integration with Wavefront by VMware. If anything, just come for the pretty graphs!
 
 ---
 
 # Introduction
 
 Note:
-Observability is an upcoming trend, tracking the take-off of microservices. For those of us working on user-facing web applications, we might have a JavaScript frontend in, say, React or Angular, that fires off calls to those systems. But, despite being the starting point of backend work, there aren't any integrations on the browser-side, compared to the backend side of things (eg. Spring, ASP.NET Core). In this talk, I'll walk through the pieces you need for Wavefront integration on the browser-side.
+Observability is an upcoming trend, tracking the take-off of microservices. For those of us working on user-facing web applications, we might have a JavaScript frontend in, say, React or Angular, that fires off calls to those systems. But, despite being the starting point of work in the backend, there is a dearth of integrations on the browser-side, compared to the backend side of things (eg. Spring, ASP.NET Core). In this talk, I'll walk through the pieces you need for browser-side integration with Wavefront by VMware.
 
 
 ## What is observability?
@@ -36,7 +39,7 @@ Observability is an upcoming trend, tracking the take-off of microservices. For 
 - RED: request rate, error rate, duration of request
 
 
-![Observability definition by Charity Majors]({{ "/public/img/2020-09-03-observability-and-the-frontend-initial-steps/Observability-definition-Charity-Majors.png" | relative_url}}) <!-- .element: style="max-width: 60%" -->
+![Observability definition by Charity Majors]({{ "/public/img/2020-09-08-observability-and-the-frontend-initial-steps/Observability-definition-Charity-Majors.png" | relative_url}}) <!-- .element: style="max-width: 60%" -->
 
 Source: https://twitter.com/mipsytipsy/status/1231833240433917952
 
@@ -70,7 +73,7 @@ Let's take a look at the system we want to make observable, and then look at wha
 
 ## Single-page Applications
 
-![Traditional vs SPA]({{ "/public/img/2020-09-03-observability-and-the-frontend-initial-steps/trad-vs-spa.png" | relative_url}}) <!-- .element: style="max-width: 40%" -->
+![Traditional vs SPA]({{ "/public/img/2020-09-08-observability-and-the-frontend-initial-steps/trad-vs-spa.png" | relative_url}}) <!-- .element: style="max-width: 40%" -->
 
 Source: https://docs.adobe.com/content/help/en/target/using/experiences/spa-visual-experience-composer.html
 
@@ -84,7 +87,7 @@ One blob of html gets sent to the browser when the user first visits the page, s
 The idea is we just send a single blob of HTML, CSS, JS once to the browser, so we can give the user a seamless or even native feel, because any pages or data that's need are retrieved in the background, the user doesn't see a "whiteout" in the browser which you get when loading a separate page of HTML, CSS, JS. On the developer side, it opens new possibilities, like how we can preserve data or state between different pages, which is not easily done or even possible when different pages get loaded.
 
 
-<!-- .slide: data-background-image="{{ "/public/img/2020-09-03-observability-and-the-frontend-initial-steps/Youtube-spa-example.png" | relative_url}}" data-background-size="80%" -->
+<!-- .slide: data-background-image="{{ "/public/img/2020-09-08-observability-and-the-frontend-initial-steps/Youtube-spa-example.png" | relative_url}}" data-background-size="80%" -->
 
 Note:
 
@@ -125,7 +128,7 @@ So now we have a rough seed or a starting point - on how we can dilenate work in
 
 ### Tracing
 
-![Example of trace and spans from Wavefront]({{ "/public/img/2020-09-03-observability-and-the-frontend-initial-steps/wavefront-tracing_trace_spans.png" | relative_url}})
+![Example of trace and spans from Wavefront]({{ "/public/img/2020-09-08-observability-and-the-frontend-initial-steps/wavefront-tracing_trace_spans.png" | relative_url}})
 
 Source: https://docs.wavefront.com/tracing_basics.html#sample-traces-and-spans
 
@@ -166,7 +169,7 @@ If you take a look at the diagram, we have a number of spans, and they are all t
 
 # Backend
 
-![Table of Wavefront SDKs]({{ "/public/img/2020-09-03-observability-and-the-frontend-initial-steps/Wavefront-sdks-table.png" | relative_url}}) <!-- .element: style="max-width: 60%" -->
+![Table of Wavefront SDKs]({{ "/public/img/2020-09-08-observability-and-the-frontend-initial-steps/Wavefront-sdks-table.png" | relative_url}}) <!-- .element: style="max-width: 60%" -->
 
 
 ## SDKs
@@ -379,7 +382,7 @@ export class WavefrontHttpInjectorService implements HttpInterceptor {
 <!-- .element: style="font-size: 0.35em" -->
 
 
-![Trace screenshot]({{ "/public/img/2020-09-03-observability-and-the-frontend-initial-steps/Trace screenshot 1.png" | relative_url}})
+![Trace screenshot]({{ "/public/img/2020-09-08-observability-and-the-frontend-initial-steps/Trace screenshot 1.png" | relative_url}})
 
 Note:
 (demo time, screenshot here in case demo fails)
@@ -397,7 +400,7 @@ Note:
 Hopefully you are now able to have a more complete picture of work in your system.
 
 
-<!-- .slide: data-background-image="{{ "/public/img/2020-09-03-observability-and-the-frontend-initial-steps/Tutorial-Adding-distributed-tracing-instrumentation.png" | relative_url}}" data-background-size="50%" -->
+<!-- .slide: data-background-image="{{ "/public/img/2020-09-08-observability-and-the-frontend-initial-steps/Tutorial-Adding-distributed-tracing-instrumentation.png" | relative_url}}" data-background-size="50%" -->
 
 
 ## Q&A
