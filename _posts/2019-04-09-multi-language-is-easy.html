@@ -1,0 +1,277 @@
+---
+title: "Multi-language is easy!"
+date: 2019-04-09 12:36:32 +0800
+tags:
+- internationalisation
+- localisation
+- talks
+licence: Copyright © 2019 Ray. <a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons Attribution 4.0 International License" src="https://i.creativecommons.org/l/by/4.0/80x15.png" /></a>
+layout: revealjs-white
+---
+
+# i18n and l10n
+
+### Multi-language is easy!
+
+<br>
+9 April 2019<br>
+Ray / @rctay
+
+---
+
+# Agenda
+
+1. The Problem
+2. The Tools
+3. The Contract
+
+---
+
+# Motivation
+
+
+## What are `.po` files?
+
+```c
+#: builtin/clean.c:829
+msgid "Would remove the following item:"
+msgid_plural "Would remove the following items:"
+msgstr[0] "Würde das folgende Element entfernen:"
+msgstr[1] "Würde die folgenden Elemente entfernen:"
+```
+
+Note:
+I use to hang out alot on the mailing list about 8 years back on an
+open-source project that was quite small at the time, it called itself
+the dumb content tracker.
+waiting for comments on my patches emailed...
+exciting times.
+saw many of these
+
+
+## Addresses have gender?
+
+> ... Acme Computer Systems do Brasil Ltda., inscrita no CNPJ sob número 01.444.777/1111-33, com sede na Alameda Rio Negro, 666, Conj 888,<br>
+> ...<br>
+> , e, SKY COMPUTADORES DO BRASIL LTDA, com sede na Avenida Industrial Belgraf nº 444, Bairro ...
+
+Note:
+Refer to this as gender instead of male/female
+
+---
+
+# The Problem
+
+
+## Familiar?
+
+```js
+console.log("%d file%s deleted", n, n == 1 ? "" : "s");
+```
+
+Note:
+(pose question)
+
+This looks bad. Is this then an improvement? (next slide)
+
+
+## Better?
+
+```js
+if (n == 1) {
+    console.log("%d file deleted");
+} else {
+    console.log("%d files deleted", n);
+}
+```
+
+
+## Better?
+
+```js
+console.log("%d file(s) deleted");  // be gone, n
+```
+
+
+## Plurals
+
+```js
+if (n == 1) {
+    console.log("%d file deleted");
+} else {
+    console.log("%d files deleted", n);
+}
+```
+
+Note:
+It helps languages where the plural form of a noun is not simply constructed by adding an ‘s’ but that is all. Once again people fell into the trap of believing the rules their language is using are universal. But the handling of plural forms differs widely between the language families.
+
+
+## Assumptions about plurals
+
+- &gt; 1 plural form
+- plural forms may not be regularly derived
+  - eg. English: append 's'
+
+Note:
+The number of plural forms differ. This is somewhat surprising for those who only have experiences with Romanic and Germanic languages since here the number is the same (there are two).
+The form how plural forms are built differs. This is a problem with languages which have many irregularities. German, for instance, is a drastic case. Though English and German are part of the same language family (Germanic), the almost regular forming of plural noun forms (appending an ‘s’) is hardly found in German.
+
+---
+
+# Familiar?
+
+```js
+console.log("You have %d,%d.%d remaining on your data plan.",
+    thousands,
+    hundreds,
+    fractional); // 12,345.67
+```
+
+
+## Let's support Japanese
+
+```js
+if (locale == 'en') {
+    console.log("You have %d,%d.%d remaining on your data plan.",
+        thousands,
+        thousandsRemainder,
+        fractional); // 12,345.67
+} else if (locale == 'jp') {  // kr, zh, ...
+    console.log("You have %d,%d.%d remaining on your data plan.",
+        tenthousands,
+        tenthousandsRemainder,
+        fractional); // 1,2345.67
+}
+```
+
+
+## Let's support German
+
+```js
+if (locale == 'en') {
+    console.log("You have %d,%d.%d remaining on your data plan.",
+        thousands,
+        thousandsRemainder,
+        fractional); // 12,345.67
+} else if (locale == 'jp') {  // kr, zh, ...
+    console.log("You have %d,%d.%d remaining on your data plan.",
+        tenthousands,
+        tenthousandsRemainder,
+        fractional); // 1,2345.67
+} else if (locale == 'de') {
+    console.log("You have %d.%d,%d remaining on your data plan.",
+        thousands,
+        thousandsRemainder,
+        fractional); // 12.345,67
+}
+```
+
+
+## These are all correct
+
+- 12,345.67 &nbsp; English
+- 1,2345.67 &nbsp; Japanese, Korean, Chinese
+- 12.345,67 &nbsp; German
+- 12345,67 &nbsp;&nbsp; French
+
+---
+
+# The Tools
+
+- `gettext(string)`
+- `ngettext(string, string, n)`
+
+
+## gettext()
+
+-
+
+## ngettext()
+
+`ngettext(string, string, n)`
+- 1st: singular form of message
+- 2nd: plural form of message
+- 3rd: quantity affecting plurality
+
+
+## Usage
+
+Instead of:
+
+```js
+console.log("%d file%s deleted", n, n == 1 ? "" : "s");
+```
+
+prefer:
+
+```js
+console.log(
+    ngettext("One file removed", "%d files removed", n),
+    n);
+```
+
+---
+
+# The Contract
+
+- See from the Translator's view
+
+
+## Conventions
+
+ - Use full, entire sentences
+ - Use format strings instead of string concatenation
+
+
+### Full sentences
+
+```js
+console.log(gettext("Resource %s is %s protected"),
+        resource,
+        rw ? gettext("write") : gettext("read"));
+```
+
+The translator sees the message to be translated as: "Resource %s is %s protected", "write", "read"
+
+Note:
+unintelligible to the translator, needs to refer to the source code
+
+
+Prefer:
+```js
+console.log(rw ?
+        gettext("Resource %s is write protected")
+        : gettext("Resource %s is read protected"),
+    resource);
+```
+
+eg. French for "write protected" is "protected against writing"
+
+
+### Full sentences
+
+- translators may not be technical, give them enough context to not need to refer to source code
+- let translators be the one to make the decision, don't "hardcode" grammar structures with string concatenation, branching, etc
+
+---
+
+### Where to go from here
+
+- Use a gettext() implementation for your programming language
+- Run xgettext to extract strings for translation
+  - `.po` format vs XLIFF format vs JSON
+  - Picking up locale information for a user (environment variables? user agents? profile setting?)
+  - Compile translated result or transmit translations?
+    - Get translators!
+      - Get users!
+        - `pgettext("Menu|", "Bookmark")`
+
+
+## Resources
+
+- GNU gettext manual [^1]
+- Mozilla Developer Network [^2]
+
+[^1]: https://www.gnu.org/software/gettext/manual/gettext.html
+[^2]: https://developer.mozilla.org/en-US/docs/Mozilla/Localization/Localization_content_best_practices
