@@ -41,11 +41,10 @@ Then came along AWS EC2/cloud, and as they say, the rest is history (and nginx c
 
 We already know, from above, the connection between Apache software and HTTP (it's a HTTP server), so no surprise on the `http` in the name. But what about the `d`?
 
-The `d` suffix indicates this process is a *daemon*, a kind of process that runs in the background, instead of started from a terminal that takes in input/writes output.
-
-So we have `sshd`, which is the name of the process of the SSH daemon so you can ssh into your machine. Or `crond`, which takes care of running cronjobs, which are commands you'd want scheduled, like 8am every Monday.
+The `d` suffix indicates this process is a *daemon*, a kind of process that runs in the background, instead of started from a terminal that takes in input/writes output. So we have `sshd`, which is the name of the process of the SSH daemon so you can ssh into your machine. We also have `crond`, which takes care of running cronjobs, which are commands you'd want scheduled, like 8am every Monday. [The Wikipedia page on daemons has more][daemon-wikipedia].
 
 A fun exercise: try daemon-ising an application of your own! You could wrap it in a script and put it in init.d[^initd-example]. Oh wait, we should be using systemd instead of initd now...
 
+[daemon-wikipedia]: https://en.wikipedia.org/wiki/Daemon_(computing)
 [^initd-example]: An example of an init.d script: <https://tldp.org/HOWTO/HighQuality-Apps-HOWTO/boot.html#boot.script>
 
