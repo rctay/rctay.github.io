@@ -28,7 +28,7 @@ export class MyBag extends Handbag<Leather> {
 }
 ```
 
-Now for the question: is there a way to provide a default type for the constructor? The code below is what we want, but it doesn't work:
+Now for the question: is there a way to provide a default of `Object` for the parameter? That is, if the user omits supplying the parameter, the parameter should default to the `Object`, which we can do `new` on, ie. `new Object()`. The code below is what we have in mind, but it doesn't work:
 
 ```typescript
 export class Handbag<T> {
@@ -57,6 +57,8 @@ If we "unpack" the body of the constructor, `handle` actually gets inferred a ty
 ```typescript
 export class Handbag<T> {
   constructor(private type: (new() => T) = Object) {
+    // previous:
+    // let handle = new type();
     let handle: T = new type();
   }
 }
@@ -64,9 +66,11 @@ export class Handbag<T> {
 
 Now we see why you can't supply `Object` as a default - because `new Object` doesn't give you something of the type `T`.
 
-Indeed, the solution we saw working (`let handle = new (type || Object)();`), the variable `handle` gets inferred a type of `Object`!
+Indeed, in the solution we saw working with `let handle = new (type || Object)()`, the variable `handle` gets inferred a type of `Object`!
 
-So, you'd have a couple of options, depending on whether you need `handle` to have a type `T` - if so, then just use `?` and wrap the line in a if/conditional.
+So, we'd have a couple of options, depending on whether we need `handle` to have a type `T`.
+
+If so, then mark the parameter as optional by suffixing it with `?` and wrap the construction in a if/conditional:
 
 ```typescript
 export class Handbag<T> {
