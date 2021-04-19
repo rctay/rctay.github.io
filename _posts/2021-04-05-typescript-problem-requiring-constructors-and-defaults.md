@@ -9,7 +9,7 @@ licence: Copyright © 2021 Ray. <a rel="license" href="http://creativecommons.or
 
 I ran into an interesting TypeScript question.
 
-Here's the situation: we want to create new objects in our generic class, so we have this definition:
+Here's the situation: we want to allow users to be able to instantiate new objects in our generic class, so we have this type definition for the parameter:
 
 ```typescript
 export class Handbag<T> {
@@ -18,7 +18,7 @@ export class Handbag<T> {
   }
 }
 ```
-Then users of our class have to provide the class in their constructor:
+Then users of our class can pass provide the class to be instantiated in their constructor:
 
 ```typescript
 export class MyBag extends Handbag<Leather> {
@@ -28,7 +28,7 @@ export class MyBag extends Handbag<Leather> {
 }
 ```
 
-Now for the question: is there a way to provide a default of `Object` for the parameter? That is, if the user omits supplying the parameter, the parameter should default to the `Object`, which we can do `new` on, ie. `new Object()`. The code below is what we have in mind, but it doesn't work:
+Now for the question: is there a way to make the parameter optional, and use `Object` as the default constructor for the instantiation? The code below is what we have in mind, but it doesn't work:
 
 ```typescript
 export class Handbag<T> {
@@ -38,17 +38,17 @@ export class Handbag<T> {
 }
 ```
 
-Making the parameter optional and having an if/conditional works though:
+Making the parameter optional with `?` and using an if/conditional instead of a default in the parameter list works though:
 
 ```typescript
 export class Handbag<T> {
-  constructor(private type?: (new() => T) = Object) {
+  constructor(private type?: (new() => T)) {
     let handle = new (type || Object)();
   }
 }
 ```
 
-Why doesn't having a default in the parameters work?
+Why doesn't the first (having a default in the parameters) work?
 
 # An Explanation
 
