@@ -52,3 +52,10 @@ exclude:
 
 # Custom vars
 version:             1.0.0
+
+defaults:
+  -
+    scope:
+      path: "_drafts"
+    values:
+      layout: "post"
