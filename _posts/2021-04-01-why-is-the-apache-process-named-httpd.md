@@ -22,7 +22,9 @@ Back in the 2000s, the [LAMP stack (Linux, Apache, MySQL, PHP)][LAMP] was all th
 
 When it came to putting your site live on the web, there was a plethora of hosting providers that you could choose from that were reasonably priced - about $10/month. These were mostly cPanel-FTP-directory based solutions, where you'd fire up a FTP client, and transfer your HTML files to the directory that was assigned to you - boom, your site is now "live" on the web!
 
-Here's what shared hosting plans looked like, circa 2009: ![shared hosting plans, circa 2009]({{ "/public/img/2021-04-01-why-is-the-apache-process-named-httpd/shared-hosting-plans.jpg "}})
+Here's what shared hosting plans looked like, circa 2009:
+
+{% include figure.html name="shared-hosting-plans.jpg" caption="shared hosting plans, circa 2009" %}
 
 Wanted some fancy `Rewrite` or password? No need to bug your not-the-friendliest-server-admins-that-be, just stick your Apache directives in a `.htaccess`! (I have learnt that nowadays this isn't such a good idea, apparently for performance and security reasons, per the Apache manual[^htaccess-manual].) Want some application code to process a form submission? Put it in your `cgi-bin` directory![^cgi-manual]
 
@@ -31,7 +33,9 @@ Wanted some fancy `Rewrite` or password? No need to bug your not-the-friendliest
 
 At that time, I was hearing about Ruby-on-Rails, and Django (written in Python). You could get them for free, too, but finding a cheap host was a problem - you either needed to get your hosting provider's server admin to edit their Apache config to configure mod_wsgi (fat chance), or go with what was then called "VPS" - a Virtual machine private server - which 1) usually costed more, and 2) was a bare-bones VM, so you'd have to install and configure everything yourself..
 
-Here's what VPS plans looked like, circa 2009: ![VPS hosting plans, circa 2009]({{ "/public/img/2021-04-01-why-is-the-apache-process-named-httpd/vps-hosting-plans.jpg "}}) This provider used Xen hypervisors, cool, you can now install everything you want...but there goes your time, when you could instead be coding a new feature, because I do mean everything, even down to installing `iptables` so your http server can be visited from the web!
+Here's what VPS plans looked like, circa 2009: {% include figure.html name="vps-hosting-plans.jpg" caption="VPS hosting plans, circa 2009" %} This provider used Xen hypervisors, cool, you can now install everything you want...but there goes your time, when you could instead be coding a new feature, because I do mean everything, even down to installing `iptables` so your http server can be visited from the web!
+
+
 
 So this was a limiting factor to learning and using these frameworks. Then I heard about this host called Webfaction, which provided VPS-level control (like ssh access) at shared-host prices, and had most stuff set up so you didn't have to spend time installing/configuring everything. In fact - this was the motivation for me to learn and use Git, where I would let it figure out which HTML files changed, so that I didn't have to send every single file over FTP - to ensure your host had the latest files to serve "live", it would be the safest to send every single file, but that might be redundant if a file hadn't changed, and you'd have to wait for the progress bar in your FTP client as it negotiated the slow Internet connection.
 
