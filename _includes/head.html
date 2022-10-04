@@ -120,6 +120,42 @@
       padding-right: 0.5em;
       vertical-align: middle;
     }
+
+    /* Source: https://www.ccostes.com/jekyll-image-organization/ */
+    /*****************/
+    /* Figure styles */
+    /*****************/
+
+    .figure {
+      margin: 10px 10px 20px;
+      text-align: center;
+    }
+
+    .figure--frame .figure__inner {
+      background-color: #EEE;
+      padding: 20px;
+    }
+
+    .figure--caption .figure__inner {
+      padding-bottom: 10px;
+    }
+
+    .figure__inner {
+      display: inline-block;
+      background-image: url(/public/img/loading.gif);
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-size: 40px;
+    }
+
+    .figure__inner--loaded {
+      background-image: none;
+    }
+
+    .figure__caption {
+      /* font-size: 0.7em; */
+      margin-top: 10px;
+    }
   </style>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
 
