@@ -116,4 +116,4 @@ The good folks at Immer have also published a `useImmer()` hook that allows you 
 
 ## Conclusion
 
-Mutating React state variables that are objects/arrays can cause unexpected behaviour. Immer is a useful addition to a React dev's toolbox, as it simplifies code to update React objects/arrays state especially when updating a property/entry that might be deeply nested.
+Mutating React state variables that are objects/arrays can cause unexpected behaviour. Immer is a useful addition to a React dev's toolbox, as it simplifies code to update React objects/arrays state, especially when updating a property/entry that might be deeply nested.
