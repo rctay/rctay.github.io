@@ -24,3 +24,10 @@ licence: Copyright © 2020 Ray. <a rel="license" href="http://creativecommons.or
    ```console
    ○ → make lets_split/rev2:default:avrdude 
    ```
+
+Handedness:
+
+```console
+avrdude -p atmega32u4 -P /dev/tty.usbmodem11101 -c avr109 -U eeprom:w:quantum/split_common/eeprom-righthand.eep
+```
+
