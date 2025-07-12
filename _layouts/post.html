@@ -2,12 +2,20 @@
 layout: default
 ---
 
+{% assign date_posted = page.date | date_to_string %}
+{% assign date_drafted = page.date_drafted | date_to_string %}
+
 <div class="post">
   <h1 class="post-title">{{ page.title }}</h1>
   <p class="post-meta">
     <time class="post-date" datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">
       {{- page.date | date_to_string -}}
     </time>
+    {% if date_drafted and date_drafted != '' and date_drafted != date_posted %}
+    (Drafted: <time class="post-date-drafted" datetime="{{ page.date_drafted | date_to_xmlschema }}" itemprop="dateDrafted">
+      {{- page.date_drafted | date_to_string -}}
+    </time>)
+    {% endif %}
     &nbsp; •{% for tag in page.tags %}<a href="{{ "/tags.html" | relative_url }}#{{ tag | slugify}}" class="post-tag">{{ tag }}</a>{% endfor %}
   </p>
   {{ content }}

@@ -1,11 +1,12 @@
 ---
-title: keyboards
-date: 2020-07-11 15:23:06 +0800
+title: Flashing Dactyl firmware on Mac
+date: 2025-07-12 12:17:00 +0800
+date_drafted: 2020-07-11 15:23:06 +0800
 tags: keyboards
-licence: Copyright © 2020 Ray. <a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons Attribution 4.0 International License" src="https://i.creativecommons.org/l/by/4.0/80x15.png" /></a>
+licence: Copyright © 2025 Ray. <a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons Attribution 4.0 International License" src="https://i.creativecommons.org/l/by/4.0/80x15.png" /></a>
 ---
 
-# Flashing Dactyl firmware on Mac
+Steps to flash my layout ([layout definition](https://github.com/rctay/tmk_keyboard/blob/master/keyboard/planck/keymaps/keymap_default.c)) for the Dactyl keyboard: https://github.com/rctay/tmk_keyboard
 
 1. Install qmk.
 
@@ -22,7 +23,7 @@ licence: Copyright © 2020 Ray. <a rel="license" href="http://creativecommons.or
 3. Flash it.
 
    ```console
-   ○ → make lets_split/rev2:default:avrdude 
+   ○ → make lets_split/rev2:default:avrdude
    ```
 
 4. Handed-ness:
