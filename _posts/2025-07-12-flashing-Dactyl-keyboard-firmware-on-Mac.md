@@ -6,7 +6,7 @@ tags: keyboards
 licence: Copyright © 2025 Ray. <a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons Attribution 4.0 International License" src="https://i.creativecommons.org/l/by/4.0/80x15.png" /></a>
 ---
 
-Steps to flash my layout ([layout definition](https://github.com/rctay/tmk_keyboard/blob/master/keyboard/planck/keymaps/keymap_default.c)) for the Dactyl keyboard: https://github.com/rctay/tmk_keyboard
+Steps to flash my layout ([layout definition](https://github.com/rctay/tmk_keyboard/blob/master/keyboard/planck/keymaps/keymap_default.c)) for the Dactyl keyboard: <https://github.com/rctay/tmk_keyboard>
 
 1. Install qmk.
 
