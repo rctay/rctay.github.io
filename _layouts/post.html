@@ -1,34 +1,11 @@
 ---
-layout: default
+layout: single
 ---
 
-{% assign date_posted = page.date | date_to_string %}
-{% assign date_drafted = page.date_drafted | date_to_string %}
+{{ content }}
 
-<div class="post">
-  <h1 class="post-title">{{ page.title }}</h1>
-  <p class="post-meta">
-    <time class="post-date" datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">
-      {{- page.date | date_to_string -}}
-    </time>
-    {% if date_drafted and date_drafted != '' and date_drafted != date_posted %}
-    (Drafted: <time class="post-date-drafted" datetime="{{ page.date_drafted | date_to_xmlschema }}" itemprop="dateDrafted">
-      {{- page.date_drafted | date_to_string -}}
-    </time>)
-    {% endif %}
-    &nbsp; •{% for tag in page.tags %}<a href="{{ "/tags.html" | relative_url }}#{{ tag | slugify}}" class="post-tag">{{ tag }}</a>{% endfor %}
-  </p>
-  {{ content }}
-
-  <hr>
-
-  <footer class="post-footer">
-    <p>Save to: <a data-pocket-label="pocket" data-pocket-count="none" class="pocket-btn" data-lang="en"></a>
-      <script type="text/javascript">!function(d,i){if(!d.getElementById(i)){var j=d.createElement("script");j.id=i;j.src="https://widgets.getpocket.com/v1/j/btn.js?v=1";var w=d.getElementById(i);d.body.appendChild(j);}}(document,"pocket-btn-js");</script></p>
-    {% if page.licence %}
-    <div class="post-footer__licence">
-      <p>{{ page.licence }}</p>
-    </div>
-    {% endif %}
-  </footer>
-</div>
+{% if page.licence %}
+<footer class="post-footer">
+  <div class="post-footer__licence">{{ page.licence }}</div>
+</footer>
+{% endif %}
