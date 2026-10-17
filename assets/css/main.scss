@@ -1,0 +1,62 @@
+---
+---
+@charset "utf-8";
+@import "minimal-mistakes/skins/{{ site.minimal_mistakes_skin | default: 'default' }}";
+@import "minimal-mistakes";
+
+blockquote.highlight {
+  background: lightyellow;
+  border-left-color: yellow;
+}
+
+.post-footer__licence {
+  font-size: 0.8rem;
+  color: #aaa;
+}
+
+.post-footer__licence img {
+  display: unset;
+  margin: 0;
+  border-radius: unset;
+  width: 80px;
+  height: 15px;
+}
+
+.page__content a {
+  overflow-wrap: anywhere;
+}
+
+/* Source: https://www.ccostes.com/jekyll-image-organization/ */
+/*****************/
+/* Figure styles */
+/*****************/
+
+.figure {
+  margin: 10px 10px 20px;
+  text-align: center;
+}
+
+.figure--frame .figure__inner {
+  background-color: #EEE;
+  padding: 20px;
+}
+
+.figure--caption .figure__inner {
+  padding-bottom: 10px;
+}
+
+.figure__inner {
+  display: inline-block;
+  background-image: url(/public/img/loading.gif);
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 40px;
+}
+
+.figure__inner--loaded {
+  background-image: none;
+}
+
+.figure__caption {
+  margin-top: 10px;
+}

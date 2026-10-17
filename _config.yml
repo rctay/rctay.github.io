@@ -1,33 +1,36 @@
-# Welcome to Jekyll!
-#
-# This config file is meant for settings that affect your whole blog, values
-# which you are expected to set up once and rarely edit after that. If you find
-# yourself editing this file very often, consider using Jekyll's data files
-# feature for the data you need to update frequently.
-#
-# For technical reasons, this file is *NOT* reloaded automatically when you use
-# 'bundle exec jekyll serve'. If you change this file, please restart the server process.
-
-# Site settings
-# These are used to personalize your new site. If you look in the HTML files,
-# you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
-# You can create any custom variable you would like, and they will be accessible
-# in the templates via {{ site.myvariable }}.
 title: Ray
-tagline: do { code; learn; sleep; } repeat;
-description: >- # this means to ignore newlines until "baseurl:"
+subtitle: do { code; learn; sleep; } repeat;
+description: >-
   sapere: (noun) knowledge, learning.
-baseurl: "" # the subpath of your site, e.g. /blog
-url: "" # the base hostname & protocol for your site, e.g. http://example.com
-paginate:            5
+url: "https://raythelean.dev"
+baseurl: ""
+repository: rctay/rctay.github.io
+locale: en-US
+minimal_mistakes_skin: default
+date_format: "%d %b %Y"
 
+theme: minimal-mistakes-jekyll
 permalink: /:categories/:title
-
-# Build settings
 markdown: kramdown
-#theme: minima
+
 plugins:
   - jekyll-feed
+  - jekyll-include-cache
+
+tag_archive:
+  type: liquid
+  path: /tags.html
+
+analytics:
+  provider: google-gtag
+  google:
+    tracking_id: UA-16555949-2
+
+footer:
+  links:
+    - label: GitHub
+      icon: fab fa-fw fa-github
+      url: https://github.com/rctay/rctay.github.io
 
 kramdown:
   header_offset: 1
@@ -36,26 +39,27 @@ collections:
   drafts:
     output: true
 
-# Exclude from processing.
-# The following items will not be processed, by default. Create a custom list
-# to override the default setting.
 exclude:
   - public/revealjs/css/theme/README.md
   - public/revealjs/plugin/markdown/example.md
-#   - Gemfile
-#   - Gemfile.lock
-#   - node_modules
-#   - vendor/bundle/
-#   - vendor/cache/
-#   - vendor/gems/
-#   - vendor/ruby/
+  - docs/superpowers/
+  - vendor/
+  - .bundle/
+  - Gemfile
+  - Gemfile.lock
+  - script/
 
-# Custom vars
-version:             1.0.0
+version: 1.0.0
 
 defaults:
-  -
-    scope:
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: post
+      show_date: true
+  - scope:
       path: "_drafts"
     values:
-      layout: "post"
+      layout: post
+      meta_robots: noindex

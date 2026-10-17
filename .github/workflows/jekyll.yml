@@ -1,0 +1,75 @@
+name: Jekyll
+
+on:
+  push:
+    branches:
+      - "**"
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+
+      - uses: ruby/setup-ruby@651ff0d62c5c79bed6d53ec518387aae20e72c1a
+        with:
+          ruby-version: '3.3'
+          bundler: 2.5.23
+          bundler-cache: true
+
+      - name: Build site
+        run: bundle exec jekyll build --strict_front_matter --destination _site
+        env:
+          JEKYLL_ENV: production
+
+      - name: Verify generated site
+        run: bundle exec ruby script/verify_site.rb _site
+
+      - name: Upload downloadable site
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: site-${{ github.run_id }}-${{ github.run_attempt }}
+          path: _site/
+          retention-days: 7
+          if-no-files-found: error
+
+      - name: Upload Pages artifact
+        if: >-
+          github.repository == 'rctay/rctay.github.io' &&
+          github.event_name != 'pull_request' &&
+          github.ref == format('refs/heads/{0}', github.event.repository.default_branch) &&
+          vars.ENABLE_PAGES_DEPLOY == 'true'
+        uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa
+        with:
+          path: _site/
+
+  deploy:
+    needs: build
+    if: >-
+      github.repository == 'rctay/rctay.github.io' &&
+      github.event_name != 'pull_request' &&
+      github.ref == format('refs/heads/{0}', github.event.repository.default_branch) &&
+      vars.ENABLE_PAGES_DEPLOY == 'true'
+    runs-on: ubuntu-24.04
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    concurrency:
+      group: pages-production
+      cancel-in-progress: false
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e
