@@ -7,6 +7,8 @@ baseurl: ""
 repository: rctay/rctay.github.io
 locale: en-US
 minimal_mistakes_skin: default
+after_footer_scripts:
+  - /assets/js/tagline.js
 date_format: "%d %b %Y"
 
 theme: minimal-mistakes-jekyll

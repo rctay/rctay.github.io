@@ -315,6 +315,16 @@ class SiteVerifier
   def verify_selected_post_content
     keyboard = post_doc("Flashing Dactyl firmware on Mac")
     assert("keyboard post drafted date is retained", clean_text(keyboard.at_css(".post-date-drafted")).include?("11 Jul 2020"))
+    metadata = keyboard.at_css("header p.post-meta")
+    assert("keyboard dates and tags share one metadata paragraph", !metadata.nil?)
+    metadata_text = clean_text(metadata).tr("\u00a0", " ").gsub(/\s+/, " ")
+    equal("keyboard inline metadata text", metadata_text, "12 Jul 2025 (Drafted: 11 Jul 2020) •keyboards")
+    published = metadata.at_css('time.post-date[itemprop="datePublished"]')
+    drafted = metadata.at_css('time.post-date-drafted[itemprop="dateDrafted"]')
+    assert("publication timestamp is machine readable", published && published["datetime"]&.start_with?("2025-07-12T"))
+    assert("draft timestamp is machine readable", drafted && drafted["datetime"]&.start_with?("2020-07-11T"))
+    equal("inline keyboard tag destination", metadata.at_css("a.post-tag")&.[]("href"), "/tags.html#keyboards")
+    assert("separate drafted-date paragraph is removed", keyboard.css("p.post-date-drafted").empty?)
     assert("keyboard post licence HTML is retained", license_badge?(keyboard))
 
     blazor = post_doc("Blazor: a first look")
@@ -337,6 +347,8 @@ class SiteVerifier
     css = File.read(output_file_for_url(stylesheet["href"]))
     normalized_css = css.gsub(/\s+/, " ")
     assert("generated CSS retains highlight styling", normalized_css.include?("blockquote.highlight"))
+    assert("generated CSS contains GitHub Dark background and keyword colours", normalized_css.include?("#0d1117") && normalized_css.include?("#ff7b72"))
+    assert("tagline script is loaded alongside theme scripts", keyboard.css("script[src]").any? { |node| url_path(node["src"]) == "/assets/js/tagline.js" })
     assert("generated CSS retains figure styling", normalized_css.include?(".figure__inner") && normalized_css.include?(".figure__caption"))
     assert("generated CSS retains licence badge styling", normalized_css.include?(".post-footer__licence") && normalized_css.match?(/\.post-footer__licence\s+img/))
   end

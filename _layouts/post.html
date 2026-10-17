@@ -2,14 +2,6 @@
 layout: single
 ---
 
-{% if page.date_drafted %}
-  {% assign date_posted = page.date | date: site.date_format %}
-  {% assign date_drafted = page.date_drafted | date: site.date_format %}
-  {% if date_drafted != date_posted %}
-<p class="post-date-drafted">Drafted: <time datetime="{{ page.date_drafted | date_to_xmlschema }}" itemprop="dateDrafted">{{ date_drafted }}</time></p>
-  {% endif %}
-{% endif %}
-
 {{ content }}
 
 {% if page.licence %}

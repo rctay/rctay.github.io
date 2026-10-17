@@ -1,0 +1,33 @@
+/* GitHub Dark token palette for Rouge code blocks; the site skin stays light.
+ * Palette: github.com/primer/primitives (dark default).
+ */
+div.highlighter-rouge,
+figure.highlight {
+  background: #0d1117;
+  color: #e6edf3;
+}
+
+div.highlighter-rouge .highlight,
+figure.highlight {
+  background: #0d1117;
+  color: #e6edf3;
+
+  pre, code { background: transparent; color: inherit; }
+  // Reset the skin's token colours before applying the GitHub palette.
+  span { color: inherit; }
+  .c, .ch, .cd, .cm, .c1, .cs, .cp, .cpf, .sd { color: #8b949e; }
+  .k, .kc, .kd, .kn, .kp, .kr, .kt, .o, .ow { color: #ff7b72; }
+  .s, .sa, .sb, .sc, .dl, .s2, .sh, .si, .sx, .sr, .s1, .ss { color: #a5d6ff; }
+  .m, .mb, .mf, .mh, .mi, .mo, .il, .l, .ld, .no, .se { color: #79c0ff; }
+  .nf, .fm, .nc, .nd { color: #d2a8ff; }
+  .na, .nb, .bp, .nv, .vc, .vg, .vi, .vm { color: #79c0ff; }
+  .nt { color: #7ee787; }
+  .nn, .ne { color: #ffa657; }
+  .err { color: #f85149; }
+  .gd { color: #ffdcd7; background: #67060c; }
+  .gi { color: #aff5b4; background: #033a16; }
+  .gh, .gu { color: #79c0ff; font-weight: bold; }
+  .gp, .go { color: #8b949e; }
+  .hll { background: #161b22; }
+  .gutter, .rouge-gutter { color: #8b949e; border-color: #30363d; }
+}
