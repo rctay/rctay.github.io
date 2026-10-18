@@ -1,5 +1,6 @@
 ---
 title: REST updating a resource
+description: Notes and references on API design, including field filters and JSON Merge Patch.
 date: 2019-01-26 11:48:00 +0800
 tags: architecture
 licence: Copyright © 2019 Ray. <a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons Attribution 4.0 International License" src="https://i.creativecommons.org/l/by/4.0/80x15.png" /></a>

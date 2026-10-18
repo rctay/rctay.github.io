@@ -1,6 +1,6 @@
 ---
 layout: archive
-title: Home
+title: Articles
 ---
 
 <div class="posts">
@@ -10,7 +10,13 @@ title: Home
   <h2>{{ year.name }}</h2>
   <ul class="post">
     {% for post in year.items %}
-    <li><time datetime="{{ post.date | date_to_xmlschema }}" itemprop="datePublished">{{ post.date | date_to_string }}</time> <a href="{{ post.url }}">{{ post.title }}</a></li>
+    <li>
+      <article class="post-preview">
+        <h3><a href="{{ post.url | relative_url }}">{{ post.title | escape }}</a></h3>
+        <p class="post-excerpt">{{ post.description | default: post.excerpt | markdownify | strip_html | normalize_whitespace | truncate: 200 | escape }}</p>
+        <time datetime="{{ post.date | date_to_xmlschema }}" itemprop="datePublished">{{ post.date | date: site.date_format }}</time>
+      </article>
+    </li>
     {% endfor %}
   </ul>
   {% endfor %}

@@ -1,9 +1,23 @@
 ---
 ---
 @charset "utf-8";
+// Configure the gem theme before importing its defaults.
+$background-color: #faf9f6;
+$text-color: #252525;
+$muted-text-color: #62625e;
+$border-color: #e3e1da;
+$link-color: #365b6d;
+$footer-background-color: $background-color;
+$global-font-family: Georgia, "Times New Roman", serif;
+$header-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+$doc-font-size: 16px;
+$doc-font-size-medium: 17px;
+$doc-font-size-large: 18px;
+$doc-font-size-x-large: 18px;
 @import "minimal-mistakes/skins/{{ site.minimal_mistakes_skin | default: 'default' }}";
 @import "minimal-mistakes";
 @import "github-dark";
+@import "reading-layout";
 
 .site-subtitle.tagline-animated {
   display: flex;

@@ -109,6 +109,7 @@ class SiteVerifier
     @home_links = @home_groups.flat_map { |group| group[:links] }
 
     verify_route_inventory
+    verify_home_excerpts
     verify_drafts
     verify_feed
     verify_tags
@@ -207,6 +208,21 @@ class SiteVerifier
     equal("home post year groups and routes", compact_groups(@home_groups), expected)
     older_blog = @index_doc.css("a[href='https://old.raythelean.dev']")
     assert("older-blog link is retained", older_blog.length == 1)
+  end
+
+  def verify_home_excerpts
+    entries = @index_doc.css(".posts ul.post > li")
+    equal("each published post has a preview", entries.length, 13)
+    entries.each do |entry|
+      heading = entry.at_css("h3 a")
+      assert("preview has a linked heading", heading && !clean_text(heading).empty?)
+      excerpt = entry.at_css(".post-excerpt")
+      assert("preview has a nonempty snippet", excerpt && !clean_text(excerpt).empty?)
+      assert("snippet is bounded", clean_text(excerpt).length <= 200)
+      assert("snippet contains plain text only", excerpt.element_children.empty?)
+    end
+    tags = html_file(@output.join("tags.html"))
+    assert("tag archive stays headings only", tags.css(".post-excerpt").empty?)
   end
 
   def extract_draft_links(doc)
