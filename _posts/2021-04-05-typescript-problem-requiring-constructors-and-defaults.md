@@ -1,5 +1,6 @@
 ---
 title: TypeScript problem with requiring constructors and defaults
+description: Why a generic constructor parameter in TypeScript cannot always use Object as its default, and an alternative that works.
 date: 2021-04-05 22:41:25 +0800
 tags: typescript
 licence: Copyright © 2021 Ray. <a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons Attribution 4.0 International License" src="https://i.creativecommons.org/l/by/4.0/80x15.png" /></a>

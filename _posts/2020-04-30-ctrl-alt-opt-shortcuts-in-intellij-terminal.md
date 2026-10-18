@@ -1,5 +1,6 @@
 ---
 title: Ctrl/Alt/Opt shortcuts in IntelliJ Terminal
+description: Restore Bash word-navigation and editing shortcuts when the Option key inserts symbols in the IntelliJ terminal on macOS.
 date: 2020-04-30 13:09:50 +0800
 tags: intellij
 licence: Copyright © 2020 Ray. <a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons Attribution 4.0 International License" src="https://i.creativecommons.org/l/by/4.0/80x15.png" /></a>
