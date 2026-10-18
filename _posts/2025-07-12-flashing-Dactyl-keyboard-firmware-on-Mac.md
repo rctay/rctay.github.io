@@ -38,7 +38,7 @@ Steps to flash my layout ([layout definition](https://github.com/rctay/tmk_keybo
 
 Because our qmk repo is reliant on avrdude 7 and has not been updated for 8, we'll run into the below:
 
-```
+```console
 $ make lets_split/rev2:default:avrdude
 QMK Firmware gh60-0.1
 WARNING:
@@ -92,7 +92,7 @@ To fix this,
 
 2. Make sure that this `avrdude` is picked up ie. higher in PATH than brew's avrdude:
 
-   ```
+   ```console
    $ which avrdude
    /opt/homebrew/bin/avrdude
    $ export PATH="/usr/local/bin:$PATH"
